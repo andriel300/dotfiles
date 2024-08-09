@@ -180,3 +180,4 @@ alias ls='eza --icons --grid --classify --colour=auto --sort=type --group-direct
 alias vim='nvim'
 alias c='clear'
 
+eval "$(atuin init zsh)"
