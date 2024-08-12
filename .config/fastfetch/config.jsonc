@@ -72,7 +72,7 @@
     "break",
     {
       "type": "host",
-      "format": "{5} Type {2}",
+      "format": "{2}",
       "key": "PC   ",
       "keyColor": "33"
     },
