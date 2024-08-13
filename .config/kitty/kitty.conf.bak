@@ -1,0 +1,10 @@
+# BEGIN_KITTY_THEME
+# Eldritch
+include current-theme.conf
+# END_KITTY_THEME
+font_family JetBrainsMono Nerd Font Mono
+bold_font Auto
+italic_font Auto 
+bold_italic_font Auto
+
+font_size 11.0
