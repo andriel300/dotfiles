@@ -110,3 +110,45 @@ theme[meter_bg]=
 
 # Title color for boxes
 theme[title]=
+
+2024/08/25 (01:43:21) | ===> btop++ v.1.3.2
+2024/08/25 (01:43:21) | ERROR: Invalid hex value: ebfafa
+
+# Color of inactive/disabled text
+theme[inactive_fg]=
+2024/08/25 (01:43:21) | ERROR: Invalid hex value: ebfafa
+
+# Background color of the percentage meters
+theme[meter_bg]=
+2024/08/25 (01:43:21) | ERROR: Invalid hex value: ebfafa
+
+# Title color for boxes
+theme[title]=
+
+2024/08/26 (16:39:37) | ===> btop++ v.1.3.2
+2024/08/26 (16:39:37) | ERROR: Invalid hex value: ebfafa
+
+# Color of inactive/disabled text
+theme[inactive_fg]=
+2024/08/26 (16:39:37) | ERROR: Invalid hex value: ebfafa
+
+# Background color of the percentage meters
+theme[meter_bg]=
+2024/08/26 (16:39:37) | ERROR: Invalid hex value: ebfafa
+
+# Title color for boxes
+theme[title]=
+
+2024/08/26 (18:52:39) | ===> btop++ v.1.3.2
+2024/08/26 (18:52:39) | ERROR: Invalid hex value: ebfafa
+
+# Color of inactive/disabled text
+theme[inactive_fg]=
+2024/08/26 (18:52:39) | ERROR: Invalid hex value: ebfafa
+
+# Background color of the percentage meters
+theme[meter_bg]=
+2024/08/26 (18:52:39) | ERROR: Invalid hex value: ebfafa
+
+# Title color for boxes
+theme[title]=
