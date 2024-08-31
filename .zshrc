@@ -1,8 +1,20 @@
+# █████╗ ███╗   ██╗██████╗ ██████╗ ██╗███████╗██╗     
+#██╔══██╗████╗  ██║██╔══██╗██╔══██╗██║██╔════╝██║     
+#███████║██╔██╗ ██║██║  ██║██████╔╝██║█████╗  ██║     
+#██╔══██║██║╚██╗██║██║  ██║██╔══██╗██║██╔══╝  ██║     
+#██║  ██║██║ ╚████║██████╔╝██║  ██║██║███████╗███████╗
+#╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝ ╚═╝  ╚═╝╚═╝╚══════╝╚══════╝                                                    
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
-# Path to your Oh My Zsh installation.
+# Path to your Oh My Zsh installation if installed using curl.
 export ZSH="$HOME/.oh-my-zsh"
+
+# Path to your oh-my-zsh installation if installed zsh using pacman.
+#ZSH=/usr/share/oh-my-zsh/
+
+source $ZSH/oh-my-zsh.sh
+source /usr/share/nvm/init-nvm.sh
 
 autoload -Uz compinit && compinit
 
@@ -71,21 +83,25 @@ zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'eza -1 --color=always $real
 zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
 
 # Shell integrations
+eval "$(atuin init zsh)"
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
-
-source $ZSH/oh-my-zsh.sh
-
-source /usr/share/nvm/init-nvm.sh
 
 # Aliases
 alias ls='eza --icons --grid --classify --colour=auto --sort=type --group-directories-first --header --modified --created --git --binary --group'
 alias vim='nvim'
 alias c='clear'
 alias lz='lazygit'
+alias un='$aurhelper -Rns' # uninstall package
+alias up='$aurhelper -Syu' # update system/package/aur
+alias pl='$aurhelper -Qs' # list installed package
+alias pa='$aurhelper -Ss' # list available package
+alias pc='$aurhelper -Sc' # remove unused cache
+alias po='$aurhelper -Qtdq | $aurhelper -Rns -' # remove unused packages, also try > $aurhelper -Qqd | $aurhelper -Rsu --print -
 
-eval "$(atuin init zsh)"
+# Functions
 
+# shell wrapper ability to change the current working directory when exiting Yazi.
 function yy() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
 	yazi "$@" --cwd-file="$tmp"
@@ -94,3 +110,55 @@ function yy() {
 	fi
 	rm -f -- "$tmp"
 }
+
+# In case a command is not found, try to find the package that has it
+function command_not_found_handler {
+    local purple='\e[1;35m' bright='\e[0;1m' green='\e[1;32m' reset='\e[0m'
+    printf 'zsh: command not found: %s\n' "$1"
+    local entries=( ${(f)"$(/usr/bin/pacman -F --machinereadable -- "/usr/bin/$1")"} )
+    if (( ${#entries[@]} )) ; then
+        printf "${bright}$1${reset} may be found in the following packages:\n"
+        local pkg
+        for entry in "${entries[@]}" ; do
+            local fields=( ${(0)entry} )
+            if [[ "$pkg" != "${fields[2]}" ]] ; then
+                printf "${purple}%s/${bright}%s ${green}%s${reset}\n" "${fields[1]}" "${fields[2]}" "${fields[3]}"
+            fi
+            printf '    /%s\n' "${fields[4]}"
+            pkg="${fields[2]}"
+        done
+    fi
+    return 127
+}
+
+# Detect the AUR wrapper
+if pacman -Qi yay &>/dev/null ; then
+   aurhelper="yay"
+elif pacman -Qi paru &>/dev/null ; then
+   aurhelper="paru"
+fi
+
+function in {
+    local -a inPkg=("$@")
+    local -a arch=()
+    local -a aur=()
+
+    for pkg in "${inPkg[@]}"; do
+        if pacman -Si "${pkg}" &>/dev/null ; then
+            arch+=("${pkg}")
+        else 
+            aur+=("${pkg}")
+        fi
+    done
+
+    if [[ ${#arch[@]} -gt 0 ]]; then
+        sudo pacman -S "${arch[@]}"
+    fi
+
+    if [[ ${#aur[@]} -gt 0 ]]; then
+        ${aurhelper} -S "${aur[@]}"
+    fi
+}
+
+#Display Pokemon
+pokemon-colorscripts --no-title -r 1,3,6
