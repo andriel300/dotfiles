@@ -1,0 +1,177 @@
+configuration {
+    modi: "drun";
+    icon-theme: "kora";
+    show-icons: true;
+    terminal: "ghostty";
+    drun-display-format: "{icon} {name}";
+    location: 0;
+    disable-history: false;
+    hide-scrollbar: true;
+    display-drun: "";
+    display-run: "";
+    display-window: "";
+    sidebar-mode: false;
+    font: "JetBrains Mono 12";
+}
+
+  /* ---- Load font ---- */
+@import "~/.config/andriel/settings/rofi-font.rasi"
+
+/* ---- Load pywal colors (custom wal template) ---- */
+@theme "~/.cache/wal/colors-rofi-pywal"
+
+/* ---- Load wallpaper ---- */
+@import "~/.config/andriel/cache/current_wallpaper.rasi"
+
+/* ---- Load border width ---- */
+@import "~/.config/andriel/settings/rofi-border.rasi"
+
+/* ---- Load border radius ---- */
+@import "~/.config/andriel/settings/rofi-border-radius.rasi"
+
+
+
+* {
+    background-color: transparent;
+}
+
+window {
+    height:30em;
+    width:30em;
+    transparency:                "real";
+    fullscreen:                  false;
+    enabled:                     true;
+    cursor:                      "default";
+    spacing:                     0em;
+    padding:                     0em;
+    background-color: @background;
+    border-radius: @border-radius;
+    border: @border-width;
+}
+
+mainbox {
+    // padding: 10px;
+      enabled:                     true;
+    spacing:                     1em;
+    padding:                     1em;
+    orientation:                 vertical;
+    // children:                    [ "inputbar" , "listbox" ];
+    // background-color:            transparent;
+    background-image:            @current-image;
+}
+
+textbox-prompt-colon {
+    enabled:                     true;
+    expand:                      false;
+    str:                         "  ";
+    padding:                     1em 0.2em 0em 0em;
+    text-color:                  @foreground;
+    border-radius:               2em 0em 0em 2em;
+    background-color:            @background;
+    background-image:            url("~/.config/andriel/cache/current_wallpaper.rasi", width);
+}
+
+  entry {
+    enabled:                     true;
+    border-radius:               0em 2em 2em 0em;
+    border: @border-width;
+    spacing:                     1em;
+    padding:                     1em;
+    background-color:            @background;
+    text-color:                  @foreground;
+    cursor:                      text;
+    placeholder:                 "Search Borders";
+    placeholder-color:           inherit;
+}
+
+
+
+listview {
+    padding: 5px 0;
+}
+
+// Elements //
+element {
+    enabled:                     true;
+    spacing:                     0em;
+    padding:                     0.5em;
+    cursor:                      pointer;
+    background-color:            transparent;
+    text-color:                  @foreground;
+}
+
+element selected.normal {
+    background-color:            @color11;
+    text-color:                  @foreground;
+    border-radius:               @border-radius;
+}
+
+element normal.normal {
+    background-color:            inherit;
+    text-color:                  @foreground;
+}
+
+element normal.urgent {
+    background-color:            inherit;
+    text-color:                  @foreground;
+}
+
+element normal.active {
+    background-color:            inherit;
+    text-color:                  @foreground;
+}
+
+element selected.urgent {
+    background-color:            inherit;
+    text-color:                  @foreground;
+}
+
+element selected.active {
+    background-color:            inherit;
+    text-color:                  @foreground;
+}
+
+element alternate.normal {
+    background-color:            inherit;
+    text-color:                  @foreground;
+}
+
+element alternate.urgent {
+    background-color:            inherit;
+    text-color:                  @foreground;
+}
+
+element alternate.active {
+    background-color:            inherit;
+    text-color:                  @foreground;
+}
+
+element-icon {
+    size:                        3em;
+    cursor:                      inherit;
+    background-color:            transparent;
+    text-color:                  inherit;
+}
+
+element-text {
+    vertical-align:              0.5;
+    horizontal-align:            0.1;
+    cursor:                      inherit;
+    background-color:            transparent;
+    text-color:                  inherit;
+}
+
+// Error message //
+error-message {
+    text-color:                  @foreground;
+    background-color:            @background;
+    text-transform:              capitalize;
+    children:                    [ "textbox" ];
+}
+
+textbox {
+    text-color:                  inherit;
+    background-color:            inherit;
+    vertical-align:              0.5;
+    horizontal-align:            0.5;
+}

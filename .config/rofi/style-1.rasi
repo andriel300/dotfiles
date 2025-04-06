@@ -1,6 +1,35 @@
+/*
+#  ____        __ _  
+# |  _ \ ___  / _(_) 
+# | |_) / _ \| |_| | 
+# |  _ < (_) |  _| | 
+# |_| \_\___/|_| |_| 
+#                    
+# by Stephan Raabe (2023) 
+# ----------------------------------------------------- 
+*/
+
+/* ---- Configuration ---- */
+configuration {
+    modi:                       "drun,filebrowser,window,run";
+    font:                       "Fira Sans 11";
+    show-icons:                 true;
+    icon-theme:                 "kora";
+    display-drun:                " ";
+    display-run:                 " ";
+    display-filebrowser:         "  ";
+    display-window:              "  ";
+	drun-display-format:        "{name}";
+    hover-select:               false;
+    scroll-method:              1;
+    me-select-entry:            "";
+    me-accept-entry:            "MousePrimary";
+    window-format:              "{w} · {c} · {t}";
+    
+}
 
 /* ---- Load font ---- */
-// @import "~/.config/andriel/settings/rofi-font.rasi"
+@import "~/.config/andriel/settings/rofi-font.rasi"
 
 /* ---- Load pywal colors (custom wal template) ---- */
 @theme "~/.cache/wal/colors-rofi-pywal"
@@ -14,127 +43,81 @@
 /* ---- Load border radius ---- */
 @import "~/.config/andriel/settings/rofi-border-radius.rasi"
 
-/*****----- Configuration -----*****/
-configuration {
-    modi:                        "drun,filebrowser,window,run";
-    show-icons:                  true;
-    display-drun:                " ";
-    display-run:                 " ";
-    display-filebrowser:         " ";
-    display-window:              " ";
-    drun-display-format:         "{name}";
-    window-format:               "{w}{t}";
-    font:                        "JetBrainsMono Nerd Font 10";
-    icon-theme:                  "Tela-circle-dracula";
-}
-
-
-// /*--Propriedades Global--*/
- * {
-     font:                        "JetBrains Mono Nerd Font 10";
-}
-
-/*****----- Main Window -----*****/
+// Main //
 window {
-    /* properties for window widget */
+    height:                      35em;
+    width:                       35em;
     transparency:                "real";
-    location:                    center;
-    anchor:                      center;
     fullscreen:                  false;
-    height:                      550px;
-    width:                       700px;
-    x-offset:                    0px;
-    y-offset:                    0px;
-
-    /* properties for all widgets */
     enabled:                     true;
-    border: @border-width;
-    border-radius:               @border-radius;
     cursor:                      "default";
+    spacing:                     0em;
+    padding:                     0em;
+    // border:                      @border-width;
+    border-color:                @color11;
+    border-radius:               @border-radius;
     background-color:            @background;
 }
 
-  /*****----- Main Box -----*****/
 mainbox {
     enabled:                     true;
-    spacing:                     0px;
-    padding: 0.8em;
-    background-color:            transparent;
+    spacing:                     0em;
+    padding:                     0em;
     orientation:                 vertical;
-    children:                    [ "inputbar", "listbox" ];
+    children:                    [ "inputbar" , "listbox" ];
+    background-color:            transparent;
+    background-image:            @current-image;
 }
 
-listbox {
-    spacing:                     20px;
-    padding:                     20px;
-    background-color:            transparent;
-    orientation:                 vertical;
-    children:                    [ "message", "listview" ];
-    background-color: @background;
 
-}
-
-  /*****----- Inputbar -----*****/
+// Inputs //
 inputbar {
     enabled:                     true;
-    spacing:                     10px;
-    padding:                     80px 60px;
+    spacing:                     0em;
+    padding:                     5em;
+    children:                    [ "textbox-prompt-colon", "entry" ];
     background-color:            transparent;
     background-image:            url("~/.config/andriel/cache/current_wallpaper.rasi", width);
-    text-color:                  @foreground;
-    children:                    [ "textbox-prompt-colon", "entry", "dummy", "mode-switcher" ];
 }
+
 textbox-prompt-colon {
     enabled:                     true;
     expand:                      false;
-    str:                         " ";
-    padding:                     12px 17px;
-    border-radius:               @border-radius;
-  text-color:                  inherit;
+    str:                         "  ";
+    padding:                     1em 0.2em 0em 0em;
+    text-color:                  @foreground;
+    border-radius:               2em 0em 0em 2em;
     background-color:            @background;
+    background-image:            url("~/.config/andriel/cache/current_wallpaper.rasi", width);
 }
+
 entry {
     enabled:                     true;
-    expand:                      false;
-    width:                       250px;
-    padding:                     12px 16px;
-    border-radius:               @border-radius;
+    border-radius:               0em 2em 2em 0em;
+    spacing:                     1em;
+    padding:                     1em;
     background-color:            @background;
-    text-color:                  inherit;
+    text-color:                  @foreground;
     cursor:                      text;
     placeholder:                 "Search";
     placeholder-color:           inherit;
 }
-dummy {
-    expand:                      true;
-    background-color:            transparent;
-}
 
-  /*****----- Mode Switcher -----*****/
-mode-switcher{
-    enabled:                     true;
-    spacing:                     10px;
-    background-color:            transparent;
-    text-color:                  @foreground;
-}
-button {
-    width:                       45px;
-    padding:                     12px;
-    border-radius:               @border-radius;
+// Lists //
+listbox {
+    padding:                     0em;
+    spacing:                     0em;
+    orientation:                 horizontal;
+    children:                    [ "listview" , "mode-switcher" ];
     background-color:            @background;
-    text-color:                  inherit;
-    cursor:                      pointer;
-}
-button selected {
-    background-color:            @color11;
-    text-color:                  @foreground;
 }
 
-/*****----- Listview -----*****/
 listview {
+    padding:                     1.5em;
+    spacing:                     0.5em;
     enabled:                     true;
-    columns:                     1;
-    lines:                       7;
+    columns:                     2;
+    lines:                       3;
     cycle:                       true;
     dynamic:                     true;
     scrollbar:                   false;
@@ -142,12 +125,34 @@ listview {
     reverse:                     false;
     fixed-height:                true;
     fixed-columns:               true;
-    
-    spacing:                     10px;
+    cursor:                      "default";
     background-color:            transparent;
     text-color:                  @foreground;
-    cursor:                      "default";
 }
+
+
+// Modes //
+mode-switcher {
+    orientation:                 vertical;
+    width:                       6.6em;
+    enabled:                     true;
+    padding:                     1.5em;
+    spacing:                     1.5em;
+    background-color:            transparent;
+}
+
+button {
+    cursor:                      pointer;
+    border-radius:               2em;
+    background-color:            @background;
+    text-color:                  @foreground;
+}
+
+button selected {
+    background-color:            @color11;
+    text-color:                  @foreground;
+}
+
 
 // Elements //
 element {
@@ -162,7 +167,7 @@ element {
 element selected.normal {
     background-color:            @color11;
     text-color:                  @foreground;
-    border-radius:               @border-radius;
+    border-radius:               1.5em;
 }
 
 element normal.normal {

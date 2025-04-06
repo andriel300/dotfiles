@@ -1,0 +1,102 @@
+// # z0mbi3 + Wallpaper Selector - Merged Configuration
+
+configuration {
+    modi:                        "drun";
+    show-icons:                  true;
+    drun-display-format:         "{name}";
+    font:                        "JetBrainsMono NF Bold 11";
+}
+
+//----- Global Properties -----//
+
+* {
+    main-bg:                     #1e1d2f;  // Background color
+    main-fg:                     #FFFFFF;    // Text color
+    select-bg:                   #7aa2f7;    // Selected background color
+    select-fg:                   #FFFFFF;    // Selected text color
+}
+
+//----- Main Window -----//
+
+window {
+    enabled:                     true;
+    fullscreen:                  false;
+    width:                       70%;         // Adjust window width for better layout
+    transparency:                "real";
+    cursor:                      "default";
+    spacing:                     0px;
+    padding:                     0px;
+    border:                      0px;
+    border-radius:               10px;        // Smooth rounded corners
+    border-color:                transparent;
+    background-color:            transparent;
+}
+
+//----- Main Box -----//
+
+mainbox {
+    enabled:                     true;
+    children:                    [ "listview" ];
+    background-color:            @main-bg;
+}
+
+//----- Listview -----//
+
+listview {
+    enabled:                     true;
+    columns:                     6;           // Display 6 images per row
+    lines:                       3;           // Show 3 rows of wallpapers
+    spacing:                     50px;        // Space between thumbnails
+    padding:                     20px 30px;   // Inner padding
+    cycle:                       true;
+    dynamic:                     false;
+    scrollbar:                   false;       // No scrollbar for a clean appearance
+    layout:                      horizontal;  // Horizontal layout for thumbnails
+    reverse:                     true;
+    fixed-height:                true;
+    fixed-columns:               true;
+    cursor:                      "default";
+    background-color:            transparent;
+    text-color:                  @main-fg;
+}
+
+//----- Elements -----//
+
+element {
+    enabled:                     true;
+    orientation:                 horizontal;
+    spacing:                     0px;
+    padding:                     0px;
+    border-radius:               20px;
+    cursor:                      pointer;
+    background-color:            transparent;
+    text-color:                  @main-fg;
+}
+
+@media(max-aspect-ratio: 1.8) {
+    element {
+        orientation:             horizontal;
+    }
+}
+
+element selected.normal {
+    background-color:            @select-bg;
+    text-color:                  @select-fg;
+}
+
+element-icon {
+    size:                        33%;
+    cursor:                      inherit;
+    border-radius:               0px;
+    background-color:            transparent;
+    text-color:                  inherit;
+}
+
+element-text {
+    vertical-align:              0.5;
+    horizontal-align:            0.5;
+    padding:                     20px;
+    cursor:                      inherit;
+    background-color:            transparent;
+    text-color:                  inherit;
+}
