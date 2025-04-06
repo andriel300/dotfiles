@@ -1,0 +1,92 @@
+/* Colors */
+
+@import '../../.cache/wal/colors-waybar.css';
+@define-color background #242424;
+@define-color groupbackground #363636;
+@define-color buttoncolor #4a4a4a;
+@define-color bordercolor @color11;
+@define-color fontcolor #FFFFFF;
+
+* {
+    font-family: "Fira Sans Semibold";
+}
+
+/* Control Center */
+
+.control-center {
+    border: 3px solid @bordercolor;
+    padding: 10px;
+}
+
+button {
+    border: 0px;
+    min-width: 35px;
+    background: @buttoncolor;
+}
+
+.notification-group-header {
+    font-size: 14px;
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button {
+    margin:5px;
+}
+
+/* Notification */
+
+.notification {
+    border: 3px solid @bordercolor;
+	border-radius: 10px;
+    padding:10px;
+}
+
+.notification-default-action:hover,
+.notification-action:hover {
+    color: #ffffff;
+    background: transparent;
+}
+
+
+/* ~/.config/swaync/style.css */
+.notification.volume {
+    background: rgba(30, 31, 41, 0.95);
+    border-radius: 12px;
+    border-left: 4px solid #8aadf4;
+    margin: 10px;
+    padding: 15px;
+}
+
+.notification.volume progressbar {
+    min-height: 6px;
+    min-width: 200px;
+    background-color: rgba(138, 173, 244, 0.2);
+    border-radius: 3px;
+    margin: 8px 0;
+}
+
+.notification.volume progressbar trough {
+    min-height: 6px;
+    background: linear-gradient(
+        to right,
+        #8aadf4 0%,
+        #8aadf4 66.66%,
+        #f5a97f 66.66%,
+        #f5a97f 83.33%,
+        #ed8796 83.33%,
+        #ed8796 100%
+    );
+    border-radius: 3px;
+}
+
+.notification.volume progressbar progress {
+    background-color: transparent;
+}
+
+/* Warning state for >100% volume */
+.notification.volume.overdrive {
+    border-left-color: #ed8796;
+}
+
+.notification.volume.overdrive progressbar {
+    background-color: rgba(237, 135, 150, 0.2);
+}
