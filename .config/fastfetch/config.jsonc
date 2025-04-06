@@ -3,124 +3,169 @@
   "logo": {
     "source": "arch2",
     "color": {
-      "1": "blue",
-      "2": "cyan"
+      "1": "cyan",
+      "2": "blue"
     },
     "padding": {
-      "top": 2
+      "top": 5,
+      "left": 1
     }
   },
+  // "logo": {
+  //   "source": "~/.config/fastfetch/images/archlinux.png",
+  //   "width": 32,
+  //   "height": 15
+  // },
   "display": {
-    "color": { "separator": "magenta" },
-    "separator": " ➜  "
+    "size": {
+      "binaryPrefix": "jedec"
+    }
   },
   "modules": [
     "break",
-    "break",
-    "break",
     {
-      "type": "os",
-      "key": " OS ",
-      "keyColor": "31" // = color1
+      "type": "custom",
+      "format": "\u001b[90m┌──────────────────────Hardware──────────────────────┐"
     },
-    {
-      "type": "kernel",
-      "key": " ├  ",
-      "keyColor": "31"
-    },
-    {
-      "type": "packages",
-      "key": " ├ 󰏖 ",
-      "keyColor": "31"
-    },
-    {
-      "type": "shell",
-      "key": " └  ",
-      "keyColor": "31"
-    },
-    "break",
-    {
-      "type": "wm",
-      "key": "DE/WM",
-      "keyColor": "32"
-    },
-    {
-      "type": "de",
-      "key": " ├  ",
-      "keyColor": "32"
-    },
-    {
-      "type": "icons",
-      "key": " ├ 󰀻 ",
-      "keyColor": "32"
-    },
-    {
-      "type": "cursor",
-      "key": " ├  ",
-      "keyColor": "32"
-    },
-    {
-      "type": "terminal",
-      "key": " ├  ",
-      "keyColor": "32"
-    },
-    {
-      "type": "terminalfont",
-      "key": " └  ",
-      "keyColor": "32"
-    },
-    "break",
     {
       "type": "host",
-      "format": "{2}",
-      "key": "PC   ",
-      "keyColor": "33"
-    },
-    {
-      "type": "cpu",
-      "format": "{1} {4} ({3}) @{7}",
-      "key": " ├  ",
-      "keyColor": "33"
-    },
-    {
-      "type": "gpu",
-      "key": " ├ 󰢮 ",
-      "keyColor": "33"
-    },
-    {
-      "type": "memory",
-      "key": " ├ 󰑭 ",
-      "keyColor": "33"
-    },
-    {
-      "type": "swap",
-      "key": " ├ 󰓡 ",
-      "keyColor": "33"
-    },
-    {
-      "type": "disk",
-      "key": " ├ 󰋊 ",
-      "keyColor": "33"
+      "key": "󱎴 PC",
+      "keyColor": "green"
     },
     {
       "type": "monitor",
-      "key": " ├  ",
-      "keyColor": "33"
+      "format": "{1} ({2}x{3}) @{11}Hz",
+      "key": "│ ├󰨇",
+      "keyColor": "green"
+    },
+    {
+      "type": "cpu",
+      "format": "{1} ({4}) @{7}",
+      "key": "│ ├",
+      "keyColor": "green"
+    },
+    {
+      "type": "gpu",
+      "key": "│ ├󰍛",
+      "keyColor": "green"
+    },
+    {
+      "type": "memory",
+      "format": "{1} / {2} ({3}) - RAM",
+      "key": "│ ├󰍛",
+      "keyColor": "green"
+    },
+    {
+      "type": "swap",
+      "format": "{1} / {2} ({3}) - SWAP",
+      "key": "│ ├󰓡",
+      "keyColor": "green"
+    },
+    {
+      "type": "disk",
+      "key": "└ └",
+      "keyColor": "green"
+    },
+    {
+      "type": "custom",
+      "format": "\u001b[90m└────────────────────────────────────────────────────┘"
+    },
+    "break",
+    {
+      "type": "custom",
+      "format": "\u001b[90m┌──────────────────────Software──────────────────────┐"
+    },
+    {
+      "type": "os",
+      "key": " OS",
+      "keyColor": "yellow"
+    },
+    {
+      "type": "kernel",
+      "key": "│ ├",
+      "keyColor": "yellow"
+    },
+    {
+      "type": "bios",
+      "key": "│ ├",
+      "keyColor": "yellow"
+    },
+    {
+      "type": "packages",
+      "key": "│ ├󰏖",
+      "keyColor": "yellow"
+    },
+    {
+      "type": "shell",
+      "key": "└ └",
+      "keyColor": "yellow"
+    },
+    "break",
+    {
+      "type": "de",
+      "key": " DE",
+      "keyColor": "cyan"
+    },
+    {
+      "type": "lm",
+      "key": "│ ├",
+      "keyColor": "cyan"
+    },
+    {
+      "type": "wm",
+      "key": "│ ├",
+      "keyColor": "cyan"
+    },
+    {
+      "type": "wmtheme",
+      "key": "│ ├󰉼",
+      "keyColor": "cyan"
+    },
+    {
+      "type": "terminalfont",
+      "key": "│ ├ ",
+      "keyColor": "cyan"
+    },
+    {
+      "type": "command",
+      "text": "$EDITOR --version | head -1",
+      "key": "│ ├EDITOR",
+      "keyColor": "cyan"
+    },
+    {
+      "type": "terminal",
+      "key": "└ └",
+      "keyColor": "cyan"
+    },
+    {
+      "type": "custom",
+      "format": "\u001b[90m└────────────────────────────────────────────────────┘"
+    },
+    "break",
+    {
+      "type": "custom",
+      "format": "\u001b[90m┌────────────────────Uptime / Age / DT────────────────────┐"
+    },
+    {
+      "type": "command",
+      "key": "  OS Age ",
+      "keyColor": "magenta",
+      "text": "birth_install=$(stat -c %W /); current=$(date +%s); time_progression=$((current - birth_install)); days_difference=$((time_progression / 86400)); echo $days_difference days"
     },
     {
       "type": "uptime",
-      "key": " └ 󰅐 ",
-      "keyColor": "33"
+      "key": "  Uptime ",
+      "keyColor": "magenta"
+    },
+    {
+      "type": "datetime",
+      "key": "  DateTime ",
+      "keyColor": "magenta"
+    },
+    {
+      "type": "custom",
+      "format": "\u001b[90m└─────────────────────────────────────────────────────────┘"
     },
     "break",
-    "break",
-    {
-      "type": "colors",
-      "paddingLeft": 1,
-      "symbol": "square",
-      "block": {
-        "width": 10
-      }
-    }
   ]
 }
