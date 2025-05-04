@@ -8,9 +8,10 @@ font-feature = ss08, ss07, calt, liga, ss12, ss09, ss02
 # ┌───────────────────────────────────┐
 # │          SECTION: THEME          │
 # └───────────────────────────────────┘
-theme = Eldritch
+ # theme = Eldritch
+theme = hybrid-eldritch-tokyo
 # theme = catppuccin-mocha
-#theme = tokyonight_moon
+# theme = tokyonight_moon
 
 # ┌───────────────────────────────────┐
 # │     SECTION: WINDOW PADDING      │
@@ -23,13 +24,13 @@ window-padding-balance = true
 # │     SECTION: CURSOR & MOUSE      │
 # └───────────────────────────────────┘
 mouse-hide-while-typing = true
-cursor-style = block
+cursor-style = underline
 #mouse-scroll-multiplier = 2
-
+cursor-style-blink = true
 # ┌───────────────────────────────────┐
 # │ SECTION: APPEARANCE & INTEGRATION│
 # └───────────────────────────────────┘
 bold-is-bright = true
 shell-integration-features = no-cursor,sudo,no-title
-background-opacity = 0.7
-
+background-opacity = 0.8
+link-url
