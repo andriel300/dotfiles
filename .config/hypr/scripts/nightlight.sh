@@ -34,7 +34,7 @@ if command -v hyprsunset &>/dev/null; then
 			fi
 			;;
 		--dec)
-			if ((value - 100 >= 4000)); then
+			if ((value - 100 >= 2000)); then
 				value=$((value - 100))
 				echo "$value" >"$value_file"
 				notification_id=$(notify-send -p -r "$notification_id" "Nightlight" "Screen temp: ${value}k")

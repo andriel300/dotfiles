@@ -1,95 +1,135 @@
 #!/bin/bash
 
-# Configuration
-THEME="${ROFI_THEME:-$HOME/.config/rofi/config.rasi}"
+# 🛠 Configurações
+THEME="${ROFI_THEME:-$HOME/.config/rofi/kool-config.rasi}"
 PID_FILE="/tmp/radio-mpv.pid"
 HISTORY_FILE="$HOME/.cache/rofi_music_history"
+ICON_DIR="$HOME/.config/rofi/music/"
+MUSIC_DIR="$HOME/Music"
 mkdir -p "$(dirname "$HISTORY_FILE")"
 
-# Notification function
+# 🔊 Notificação
 notification() {
-	notify-send "Music Player" "$@" --icon=media-tape
+	notify-send -u normal -i "$ICON_DIR/music.png" "🎵 Now Playing" "$@"
 }
 
-# Main menu
-menu() {
-	printf "1. Lofi Girl ☕️🎶\n"
-	printf "2. Chillhop ☕️🎶\n"
-	printf "3. Box Lofi ☕️🎶\n"
-	printf "4. The Bootleg Boy ☕️🎶\n"
-	printf "5. Radio Spinner ☕️🎶\n"
-	printf "6. SmoothChill ☕️🎶\n"
-	printf "7. Deep Focus Study 📚\n"
-	printf "8. Rain Sounds 🌧️ \n"
-	printf "9. Fireplace Crackling 🔥 \n"
-	printf "10. White Noise Study 🎧 \n"
-	printf "11. Brown Noise Study 🎧 \n"
-	printf "12. Forest Sounds 🌲 \n"
-	printf "16. Stop & Exit\n"
+# 🎧 Rádios Online
+declare -A online_music=(
+	["FM - Easy Rock 96.3 📻🎶"]="https://radio-stations-philippines.com/easy-rock"
+	["FM - Easy Rock - Baguio 91.9 📻🎶"]="https://radio-stations-philippines.com/easy-rock-baguio"
+	["FM - Love Radio 90.7 📻🎶"]="https://radio-stations-philippines.com/love"
+	["FM - WRock - CEBU 96.3 📻🎶"]="https://onlineradio.ph/126-96-3-wrock.html"
+	["FM - Fresh Philippines 📻🎶"]="https://onlineradio.ph/553-fresh-fm.html"
+	["Radio - Lofi Girl 🎧🎶"]="https://play.streamafrica.net/lofiradio"
+	["Radio - Chillhop 🎧🎶"]="http://stream.zeno.fm/fyn8eh3h5f8uv"
+	["Radio - Ibiza Global 🎧🎶"]="https://filtermusic.net/ibiza-global"
+	["Radio - Metal Music 🎧🎶"]="https://tunein.com/radio/mETaLmuSicRaDio-s119867/"
+	["YT - Wish 107.5 YT Pinoy HipHop 📻🎶"]="https://youtube.com/playlist?list=PLkrzfEDjeYJnmgMYwCKid4XIFqUKBVWEs&si=vahW_noh4UDJ5d37"
+	["YT - Youtube Top 100 Songs Global 📹🎶"]="https://youtube.com/playlist?list=PL4fGSI1pDJn6puJdseH2Rt9sMvt9E2M4i&si=5jsyfqcoUXBCSLeu"
+	["YT - Wish 107.5 YT Wishclusives 📹🎶"]="https://youtube.com/playlist?list=PLkrzfEDjeYJn5B22H9HOWP3Kxxs-DkPSM&si=d_Ld2OKhGvpH48WO"
+	["YT - Relaxing Piano Music 🎹🎶"]="https://youtu.be/6H7hXzjFoVU?si=nZTPREC9lnK1JJUG"
+	["YT - Youtube Remix 📹🎶"]="https://youtube.com/playlist?list=PLeqTkIUlrZXlSNn3tcXAa-zbo95j0iN-0"
+	["YT - Korean Drama OST 📹🎶"]="https://youtube.com/playlist?list=PLUge_o9AIFp4HuA-A3e3ZqENh63LuRRlQ"
+	["YT - Relaxing Piano Jazz Music 🎹🎶"]="https://youtu.be/85UEqRat6E4?si=jXQL1Yp2VP_G6NSn"
+	["Lofi Girl ☕️"]="https://www.youtube.com/watch?v=jfKfPfyJRdk"
+	["Chillhop ☕️"]="https://www.youtube.com/watch?v=5yx6BWlEVcY"
+	["Smooth Chill 💆"]="https://www.youtube.com/watch?v=lTRiuFIWV54"
+	["Rain Sounds 🌧️"]="https://www.youtube.com/watch?v=mPZkdNFkNps"
+	["Fireplace 🔥"]="https://www.youtube.com/watch?v=eyU3bRy2x44"
+	["Forest Sounds 🌲"]="https://www.youtube.com/watch?v=OdIJ2x3nxzQ"
+)
+
+# 🎼 Preenche lista de músicas locais
+populate_local_music() {
+	local_music=()
+	filenames=()
+	while IFS= read -r file; do
+		local_music+=("$file")
+		filenames+=("$(basename "$file")")
+	done < <(find "$MUSIC_DIR" -type f \( -iname "*.mp3" -o -iname "*.flac" -o -iname "*.wav" -o -iname "*.ogg" \))
 }
 
-# Play stream function
+# 📜 Salva histórico
+save_history() {
+	echo "$1" >>"$HISTORY_FILE"
+	tail -n 15 "$HISTORY_FILE" >"$HISTORY_FILE.tmp" && mv "$HISTORY_FILE.tmp" "$HISTORY_FILE"
+}
+
+# ▶️ Player
 play_stream() {
 	local url="$1"
-	local volume="$2"
-	local title="$3"
-	mpv --no-video --volume="$volume" --title="radio-mpv" --ytdl --ytdl-format="bestaudio" --loop-playlist "$url" &>/dev/null &
-	pid=$!
-	if [ $? -eq 0 ]; then
-		echo "$pid" >"$PID_FILE"
-		save_history "$url"
-		notification "$title"
-	else
-		notification "Error" "Failed to play $url" --icon=error
-		rm -f "$PID_FILE"
-	fi
+	local title="$2"
+	mpv --no-video --volume=60 --title="radio-mpv" --ytdl --loop-playlist "$url" &>/dev/null &
+	echo "$!" >"$PID_FILE"
+	save_history "$title"
+	notification "$title"
 }
 
-# Main function
-main() {
-	choice=$(menu | rofi -dmenu -i -theme "$THEME" -p "Select Music Stream" | cut -d. -f1)
+# 🎶 Play música local
+play_local_music() {
+	populate_local_music
+	choice=$(printf "%s\n" "${filenames[@]}" | rofi -dmenu -i -theme "$THEME" -p "🎵 Escolha uma música")
+	[[ -z "$choice" ]] && exit 1
 
-	# Stop existing stream if a new one is selected
-	if [ -n "$choice" ] && [ "$choice" -ne 15 ] && [ "$choice" -ne 16 ] && [ -f "$PID_FILE" ] && kill -0 "$(cat "$PID_FILE")" 2>/dev/null; then
+	for i in "${!filenames[@]}"; do
+		if [[ "${filenames[$i]}" == "$choice" ]]; then
+			notification "$choice"
+			mpv --playlist-start="$i" --loop-playlist --no-video "${local_music[@]}"
+			break
+		fi
+	done
+}
+
+# 🔀 Shuffle local
+shuffle_local_music() {
+	notification "🔀 Shuffle local"
+	mpv --shuffle --loop-playlist --no-video "$MUSIC_DIR"
+}
+
+# 📜 Ver histórico
+show_history() {
+	[ ! -f "$HISTORY_FILE" ] && echo "Nenhum histórico encontrado" && return
+	rofi -dmenu -i -theme "$THEME" -p "🕘 Últimos tocados" <"$HISTORY_FILE"
+}
+
+# 🎛 Menu principal
+main_menu() {
+	printf "🎧 Online Music\n"
+	printf "🎵 Local Music\n"
+	printf "🔀 Shuffle Local\n"
+	printf "🕘 History\n"
+	printf "❌ Stop & Exit\n"
+}
+
+# 🧠 Lógica principal
+main() {
+	choice=$(main_menu | rofi -dmenu -i -theme "$THEME" -p "🎶 Rofi Beats")
+
+	# Para música atual
+	if [ -f "$PID_FILE" ] && kill -0 "$(cat "$PID_FILE")" 2>/dev/null; then
 		pkill -f "radio-mpv" && rm -f "$PID_FILE"
 	fi
 
 	case "$choice" in
-	1) play_stream "https://www.youtube.com/watch?v=jfKfPfyJRdk" 70 "Lofi Girl ☕️🎶" ;;
-	2) play_stream "https://www.youtube.com/watch?v=5yx6BWlEVcY" 60 "Chillhop ☕️🎶" ;;
-	3) play_stream "https://www.youtube.com/watch?v=DWcJFNfaw9c" 60 "Box Lofi ☕️🎶" ;;
-	4) play_stream "https://www.youtube.com/watch?v=A_hmrykwR7g" 60 "The Bootleg Boy ☕️🎶" ;;
-	5) play_stream "https://www.youtube.com/watch?v=kgx4WGK0oNU" 60 "Radio Spinner ☕️🎶" ;;
-	6) play_stream "https://www.youtube.com/watch?v=lTRiuFIWV54" 60 "SmoothChill ☕️🎶" ;;
-	7) play_stream "https://www.youtube.com/playlist?list=PLedq9ElFqyovtjE-RXFe2Ct9dQk1T9wh3" 100 "Deep Focus Study Playlist 🎧📚" ;;
-	8) play_stream "https://www.youtube.com/watch?v=mPZkdNFkNps" 80 "Rain Sounds 🌧️" ;;
-	9) play_stream "https://www.youtube.com/watch?v=eyU3bRy2x44" 100 "Fireplace Crackling 🔥" ;;
-	10) play_stream "https://www.youtube.com/watch?v=nMfPqeZjc2c" 60 "White Noise 🎧" ;;
-	11) play_stream "https://www.youtube.com/watch?v=0GDfOAuUvQ0" 60 "Brown Noise Study Focus 🎧" ;;
-	12) play_stream "https://www.youtube.com/watch?v=OdIJ2x3nxzQ" 80 "Forest Sounds 🌲" ;;
-	16 | "")
-		if [ -f "$PID_FILE" ] && kill -0 "$(cat "$PID_FILE")" 2>/dev/null; then
-			pkill -f "radio-mpv" && rm -f "$PID_FILE" && notification "Stopped & Exited"
-		fi
-		exit 0
+	"🎧 Online Music")
+		stream=$(printf "%s\n" "${!online_music[@]}" | sort | rofi -dmenu -i -theme "$THEME" -p "📻 Online Radios")
+		[[ -z "$stream" ]] && exit 0
+		play_stream "${online_music[$stream]}" "$stream"
 		;;
-	*) notification "Invalid option" && exit 1 ;;
+	"🎵 Local Music") play_local_music ;;
+	"🔀 Shuffle Local") shuffle_local_music ;;
+	"🕘 History") show_history ;;
+	"❌ Stop & Exit") notification "Música parada 👋" && exit 0 ;;
+	*) notification "Opção inválida ❌" && exit 1 ;;
 	esac
 }
 
-# Check dependencies
+# 🧪 Verifica dependências
 for cmd in mpv rofi notify-send; do
-	if ! command -v "$cmd" &>/dev/null; then
-		echo "Error: $cmd is not installed." >&2
+	command -v "$cmd" &>/dev/null || {
+		echo "Erro: '$cmd' não encontrado"
 		exit 1
-	fi
+	}
 done
 
-# Run main if no arguments, otherwise handle controls
-if [ -z "$1" ]; then
-	main
-else
-	case "$1" in
-	"control") control_menu ;;
-	esac
-fi
+main
