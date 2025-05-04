@@ -1,0 +1,26 @@
+# Ghostty Hybrid Theme: Eldritch + Tokyo Night Moon
+# Base: Eldritch | Accents: Tokyo Night Moon
+
+# Ghostty Hybrid Theme: Eldritch + Tokyo Night Moon
+palette = 0=#21222c
+palette = 1=#f9515d
+palette = 2=#37f499
+palette = 3=#e9f941
+palette = 4=#7aa2f7
+palette = 5=#bb9af7
+palette = 6=#7dcfff
+palette = 7=#c0caf5
+palette = 8=#737BC2
+palette = 9=#f7768e
+palette = 10=#9ece6a
+palette = 11=#e0af68
+palette = 12=#2ac3de
+palette = 13=#9d7cd8
+palette = 14=#7dcfff
+palette = 15=#ffffff
+
+background = #212337
+foreground = #c0caf5
+cursor-color = #37f499
+selection-background = #bb9af7
+selection-foreground = #1a1b26
