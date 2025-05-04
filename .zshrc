@@ -70,12 +70,13 @@ zinit light Aloxaf/fzf-tab
 
 # Add snippets
 zinit snippet OMZP::git
+zinit snippet OMZP::bun
+zinit snippet OMZP::command-not-found
 zinit snippet OMZP::sudo
 zinit snippet OMZP::archlinux
 zinit snippet OMZP::aws
-zinit snippet OMZP::kubectl
-zinit snippet OMZP::kubectx
-
+zi snippet OMZ::lib/clipboard.zsh
+zi snippet OMZ::lib/termsupport.zsh
 zinit cdreplay -q
 
 # Keybindings
@@ -122,7 +123,8 @@ alias up='$aurhelper -Syu' # update system/package/aur
 alias pl='$aurhelper -Qs' # list installed package
 alias pa='$aurhelper -Ss' # list available package
 alias pc='$aurhelper -Sc' # remove unused cache
-alias po='$aurhelper -Qtdq | $aurhelper -Rns -' # remove unused packages, also try > $aurhelper -Qqd | $aurhelper -Rsu --print -
+alias po='$aurhelper -Qtdq | $aurhelper -Rns -' # remove unused packages, also try > $aurhelper -Qqd | $aurhelper -Rsu --print -pokemon-colorscripts
+alias shark='display3d ~/.config/display3d/blahaj.obj -t 0,0,5.5'
 
 # cleaning up home folder
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
@@ -156,7 +158,7 @@ export XDG_CONFIG_HOME XDG_CONFIG_DIR XDG_DATA_HOME XDG_STATE_HOME XDG_CACHE_HOM
 function yy() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
 	yazi "$@" --cwd-file="$tmp"
-	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+	if cwd="$(bat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
 		builtin cd -- "$cwd"
 	fi
 	rm -f -- "$tmp"
@@ -229,26 +231,6 @@ pokemon-colorscripts --no-title -r 1,3,6
 #fi
   
 
-
-# Command not found handler
-function command_not_found_handler {
-    local purple='\e[1;35m' bright='\e[0;1m' green='\e[1;32m' reset='\e[0m'
-    printf 'zsh: command not found: %s\n' "$1"
-    local entries=( ${(f)"$(/usr/bin/pacman -F --machinereadable -- "/usr/bin/$1")"} )
-    if (( ${#entries[@]} > 0 )); then
-        printf "${bright}$1${reset} may be found in the following packages:\n"
-        local pkg
-        for entry in "${entries[@]}"; do
-            local fields=( ${(0)entry} )
-            if [[ "$pkg" != "${fields[2]}" ]]; then
-                printf "${purple}%s/${bright}%s ${green}%s${reset}\n" "${fields[1]}" "${fields[2]}" "${fields[3]}"
-            fi
-            printf '    /%s\n' "${fields[4]}"
-            pkg="${fields[2]}"
-        done
-    fi
-    return 127
-}
 export EDITOR=nvim
 export VISUAL=nvim
 export PATH="$HOME/eww/target/release:$PATH" # open eww
