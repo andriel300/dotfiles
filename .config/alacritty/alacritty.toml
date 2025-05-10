@@ -1,7 +1,3 @@
-#import = ["~/.config/alacritty/themes/themes/catppuccin_mocha.toml"]
-import = ["~/.config/alacritty/themes/themes/eldritch.toml"]
-
-live_config_reload = true
 
 [bell]
 animation = "EaseOutExpo"
@@ -143,7 +139,7 @@ mouse = "Middle"
 [selection]
 semantic_escape_chars = ",│`|:\"' ()[]{}<>"
 
-[shell]
+[terminal.shell]
 program = "/bin/zsh"
 
 [scrolling]
@@ -168,3 +164,12 @@ instance = "Alacritty"
 [window.padding]
 x = 4
 y = 4
+
+[general]
+
+live_config_reload = true
+# import = ["~/.config/alacritty/themes/themes/catppuccin_mocha.toml"]
+# import = ["~/.config/alacritty/themes/themes/eldritch.toml"]
+import = ["~/.config/alacritty/themes/tokyonight_moon.toml"]
+
+[terminal]

@@ -118,12 +118,22 @@ alias vim='nvim'
 alias kvim='NVIM_APPNAME=KickstartNvim nvim'
 alias c='clear'
 alias lz='lazygit'
+
+# Package Management Aliases
 alias un='$aurhelper -Rns' # uninstall package
-alias up='$aurhelper -Syu' # update system/package/aur
 alias pl='$aurhelper -Qs' # list installed package
 alias pa='$aurhelper -Ss' # list available package
 alias pc='$aurhelper -Sc' # remove unused cache
 alias po='$aurhelper -Qtdq | $aurhelper -Rns -' # remove unused packages, also try > $aurhelper -Qqd | $aurhelper -Rsu --print -pokemon-colorscripts
+
+# Powerpill Update Aliases
+alias up='update-system' # Full system update (powerpill + AUR helper)
+alias ups='sudo pacman -Sy && sudo powerpill -Su && $aurhelper -Su' # Standard update
+alias upp='sudo powerpill -Su' # Update only system packages with powerpill
+alias upa='$aurhelper -Su' # Update only AUR packages
+alias upf='sudo pacman -Sy && sudo powerpill -Syu && $aurhelper -Syu' # Force refresh all
+
+# ASCII ART aliases
 alias shark='display3d ~/.config/display3d/blahaj.obj -t 0,0,5.5'
 
 # cleaning up home folder
@@ -187,7 +197,23 @@ bindkey -M emacs '\es' sesh-sessions
 bindkey -M vicmd '\es' sesh-sessions
 bindkey -M viins '\es' sesh-sessions
 
+# Smart system update with Powerpill
+update-system() {
+    echo -e "\033[1;33mRefreshing package databases...\033[0m"
+    sudo pacman -Sy
+    
+    echo -e "\n\033[1;33mUpdating system packages with powerpill...\033[0m"
+    sudo powerpill -Su
+    
+    if command -v paru &>/dev/null || command -v yay &>/dev/null; then
+        echo -e "\n\033[1;33mUpdating AUR packages...\033[0m"
+        $aurhelper -Su
+    fi
+    
+    echo -e "\n\033[1;32mUpdate complete!\033[0m"
+}
 
+# Package installation with automatic Arch/AUR detection
 function in {
     local -a inPkg=("$@")
     local -a arch=()
@@ -202,14 +228,15 @@ function in {
     done
 
     if [[ ${#arch[@]} -gt 0 ]]; then
-        sudo pacman -S "${arch[@]}"
+        echo -e "\033[1;33mInstalling system packages with powerpill...\033[0m"
+        sudo powerpill -S "${arch[@]}"
     fi
 
-    if [[ ${#aur[@]} -gt 0 ]]; then
-        ${aurhelper} -S "${aur[@]}"
+    if [[ ${#aur[@]} -gt 0 ]] && { command -v paru &>/dev/null || command -v yay &>/dev/null; }; then
+        echo -e "\033[1;33mInstalling AUR packages...\033[0m"
+        $aurhelper -S "${aur[@]}"
     fi
 }
-
 
 # bun completions
 [ -s "/home/diel/.bun/_bun" ] && source "/home/diel/.bun/_bun"
@@ -231,12 +258,15 @@ pokemon-colorscripts --no-title -r 1,3,6
 #fi
   
 
+. "$HOME/.local/bin/env"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/home/diel/.lmstudio/bin"
+# End of LM Studio CLI section
+
 export EDITOR=nvim
 export VISUAL=nvim
 export PATH="$HOME/eww/target/release:$PATH" # open eww
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-
-
-. "$HOME/.local/bin/env"
