@@ -1,50 +1,47 @@
- /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  
- /* wallust template - colors-rofi */
+/* ---- 💫 Catppuccin Macchiato Theme 💫 ---- */
+/* wallust template - colors-rofi */
 
 * {
-active-background: #784CA0;
-active-foreground: #FAE8E1;
-normal-background: #181519;
-normal-foreground: #FAE8E1;
-urgent-background: #CC659A;
-urgent-foreground: #FAE8E1;
+  active-background: #8aadf4;
+  active-foreground: #cad3f5;
+  normal-background: #24273a;
+  normal-foreground: #cad3f5;
+  urgent-background: #ed8796;
+  urgent-foreground: #cad3f5;
 
-alternate-active-background: #914B4B;
-alternate-active-foreground: #FAE8E1;
-alternate-normal-background: #181519;
-alternate-normal-foreground: #FAE8E1;
-alternate-urgent-background: #181519;
-alternate-urgent-foreground: #FAE8E1;
+  alternate-active-background: #8aadf4;
+  alternate-active-foreground: #cad3f5;
+  alternate-normal-background: #24273a;
+  alternate-normal-foreground: #cad3f5;
+  alternate-urgent-background: #24273a;
+  alternate-urgent-foreground: #cad3f5;
 
-selected-active-background: #CC659A;
-selected-active-foreground: #FAE8E1;
-selected-normal-background: #CC659A;
-selected-normal-foreground: #FAE8E1;
-selected-urgent-background: #784CA0;
-selected-urgent-foreground: #FAE8E1;
+  selected-active-background: #8aadf4;
+  selected-active-foreground: #24273a;
+  selected-normal-background: #8aadf4;
+  selected-normal-foreground: #24273a;
+  selected-urgent-foreground: #cad3f5;
 
-background-color: #181519;
-background: rgba(0,0,0,0.7);
-foreground: #FAE8E1;
-border-color: #784CA0;
+  background-color: #24273a;
+  background: #24273a;
+  foreground: #cad3f5;
+  border-color: #8aadf4;
 
-color0: #3F3C40;
-color1: #1A1022;
-color2: #492E61;
-color3: #6D3838;
-color4: #5A3978;
-color5: #994C74;
-color6: #B58E80;
-color7: #F0D6CC;
-color8: #A8958F;
-color9: #23152D;
-color10: #613D81;
-color11: #914B4B;
-color12: #784CA0;
-color13: #CC659A;
-color14: #F2BDAA;
-color15: #F0D6CC;
-
-
+  color0: #494d64;
+  color1: #ed8796;
+  color2: #a6da95;
+  color3: #eed49f;
+  color4: #8aadf4;
+  color5: #f5bde6;
+  color6: #8bd5ca;
+  color7: #b8c0e0;
+  color8: #5b6078;
+  color9: #ed8796;
+  color10: #a6da95;
+  color11: #eed49f;
+  color12: #8aadf4;
+  color13: #f5bde6;
+  color14: #8bd5ca;
+  color15: #cad3f5;
 }
 

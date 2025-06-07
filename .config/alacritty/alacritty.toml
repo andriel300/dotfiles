@@ -22,19 +22,19 @@ TERM = "xterm-256color"
 size = 12.0
 
 [font.bold]
-family = "JetBrains Mono Nerd Font"
+family = "MonoLisa"
 style = "Bold"
 
 [font.bold_italic]
-family = "JetBrains Mono Nerd Font"
+family = "MonoLisa"
 style = "Bold Italic"
 
 [font.italic]
-family = "JetBrains Mono Nerd Font"
+family = "MonoLisa"
 style = "Italic"
 
 [font.normal]
-family = "JetBrains Mono Nerd Font"
+family = "MonoLisa"
 style = "Regular"
 
 [font.glyph_offset]
@@ -149,7 +149,7 @@ history = 5000
 dynamic_padding = true
 dynamic_title = true
 option_as_alt = "Both"
-opacity = 0.98
+opacity = 0.80
 decorations = "None"
 title = "Alacritty"
 
@@ -168,8 +168,8 @@ y = 4
 [general]
 
 live_config_reload = true
-# import = ["~/.config/alacritty/themes/themes/catppuccin_mocha.toml"]
-# import = ["~/.config/alacritty/themes/themes/eldritch.toml"]
-import = ["~/.config/alacritty/themes/tokyonight_moon.toml"]
+import = ["~/.config/alacritty/themes/catppuccin-mocha.toml"]
+# import = ["~/.config/alacritty/themes/eldritch.toml"]
+# import = ["~/.config/alacritty/themes/tokyonight_moon.toml"]
 
 [terminal]
