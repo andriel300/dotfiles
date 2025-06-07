@@ -22,7 +22,7 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
   --color=fg:#ebfafa,fg+:#ebfafa,bg:#282a36,bg+:#212337
   --color=hl:#34f499,hl+:#37f499,info:#f7c67f,marker:#7081d0
   --color=prompt:#01d1f9,spinner:#f7c67f,pointer:#7081d0,header:#323449
-  --color=border:#ebfafa,label:#aeaeae,query:#d9d9d9
+  --color=border:#ebfafa,label:#ebfafa,query:#d9d9d9
   --border="sharp" --border-label="" --preview-window="border-sharp" --prompt="» "
   --marker=">" --pointer="◆" --separator="─" --scrollbar="│"
   --preview="bat --style=numbers,changes --color=always {}"
@@ -58,9 +58,14 @@ source "${ZINIT_HOME}/zinit.zsh"
 
 zinit light ohmyzsh/ohmyzsh
 
+# powerlevel10k
 #zinit ice depth=1; zinit light romkatv/powerlevel10k
+
 # oh-my-posh
 eval "$(oh-my-posh init zsh --config $HOME/.config/ohmyposh/zen.omp.toml)"
+
+# startship
+# eval "$(starship init zsh)"
 
 # Add in zsh plugins
 zinit light zsh-users/zsh-syntax-highlighting
@@ -118,13 +123,18 @@ alias vim='nvim'
 alias kvim='NVIM_APPNAME=KickstartNvim nvim'
 alias c='clear'
 alias lz='lazygit'
+# Use advcpmv with progress bar
+alias cp='/usr/local/bin/cpg -g'
+alias mv='/usr/local/bin/mvg -g'
+
 
 # Package Management Aliases
 alias un='$aurhelper -Rns' # uninstall package
 alias pl='$aurhelper -Qs' # list installed package
 alias pa='$aurhelper -Ss' # list available package
 alias pc='$aurhelper -Sc' # remove unused cache
-alias po='$aurhelper -Qtdq | $aurhelper -Rns -' # remove unused packages, also try > $aurhelper -Qqd | $aurhelper -Rsu --print -pokemon-colorscripts
+alias po='$aurhelper -Qtdq | $aurhelper -Rns -' # remove unused packages
+alias po2='$aurhelper -Qqd | $aurhelper -Rsu --print -pokemon-colorscripts' # testing
 
 # Powerpill Update Aliases
 alias up='update-system' # Full system update (powerpill + AUR helper)
@@ -249,15 +259,13 @@ export BAT_THEME="OneHalfDark"
 #→ Use Bat (by itself) for man pages:
 export MANPAGER="less -R --use-color -Dd+r -Du+b"
 
-#Display Pokemon
-pokemon-colorscripts --no-title -r 1,3,6
-
 # Automatically launch a tmux session
 #if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
 #  tmux attach-session -t default || tmux new-session -s default
 #fi
   
-
+#Display Pokemon
+pokemon-colorscripts --no-title -r 1,3,6
 . "$HOME/.local/bin/env"
 
 # Added by LM Studio CLI (lms)
@@ -266,7 +274,10 @@ export PATH="$PATH:/home/diel/.lmstudio/bin"
 
 export EDITOR=nvim
 export VISUAL=nvim
+export set_sysname=$(uname -n)
 export PATH="$HOME/eww/target/release:$PATH" # open eww
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+export PATH=$PATH:/home/diel/.spicetify
