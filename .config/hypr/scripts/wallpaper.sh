@@ -107,18 +107,18 @@ fi
 # Execute pywal
 # -----------------------------------------------------
 
-echo ":: Execute pywal with $used_wallpaper"
-wal -q -i "$used_wallpaper"
-source "$HOME/.cache/wal/colors.sh"
-
+# echo ":: Execute pywal with $used_wallpaper"
+# wal -q -i "$used_wallpaper"
+# source "$HOME/.cache/wal/colors.sh"
+#
 # -----------------------------------------------------
 # Walcord
 # -----------------------------------------------------
 
-if type walcord >/dev/null 2>&1; then
-	walcord
-fi
-
+# if type walcord >/dev/null 2>&1; then
+# 	walcord
+# fi
+#
 # -----------------------------------------------------
 # Reload Waybar
 # -----------------------------------------------------

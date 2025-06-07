@@ -30,7 +30,7 @@ for image in "$wall_dir"/*.{jpg,jpeg,png,webp}; do
 		filename=$(basename "$image")
 		if [ ! -f "${cache_dir}/${filename}" ]; then
 			echo "Generating thumbnail for: $image"
-			magick convert -strip "$image" -thumbnail 400x400^ -gravity center -extent 400x400 "${cache_dir}/${filename}"
+			magick -strip "$image" -thumbnail 400x400^ -gravity center -extent 400x400 "${cache_dir}/${filename}"
 		fi
 	fi
 done

@@ -7,18 +7,24 @@
 #           |_|
 #
 
-case $1 in
-d)
-	cliphist list | rofi -dmenu -replace -config ~/.config/rofi/config-cliphist.rasi | cliphist delete
-	;;
+# Temporary directory for decoded images
+TMP_DIR="/tmp/cliphist-icons"
+mkdir -p "$TMP_DIR"
+rm -f "$TMP_DIR"/*
 
-w)
-	if [ $(echo -e "Clear\nCancel" | rofi -dmenu -config ~/.config/rofi/config-short.rasi) == "Clear" ]; then
-		cliphist wipe
-	fi
-	;;
+# Load clipboard selection from cliphist and format with icon metadata
+CLIPHIST_ENTRIES=$(cliphist list | gawk -v tmp="$TMP_DIR" '
+    match($0, /^([0-9]+)\s(\[\[\s)?binary.*\.(jpg|jpeg|png|bmp)/, grp) {
+        cmd = "cliphist decode <<<\"" grp[1] "\" > \"" tmp "/" grp[1] "." grp[3] "\""
+        system(cmd)
+        print $0 "\0icon\x1f" tmp "/" grp[1] "." grp[3]
+        next
+    }
+    { print }
+')
 
-*)
-	cliphist list | rofi -dmenu -replace -config ~/.config/rofi/config-cliphist.rasi | cliphist decode | wl-copy
-	;;
-esac
+# Use rofi with icon support
+SELECTION=$(echo -e "$CLIPHIST_ENTRIES" | rofi -dmenu -show-icons -config ~/.config/rofi/config-cliphist.rasi)
+
+# Decode and copy selected entry
+[[ -n "$SELECTION" ]] && cliphist decode <<<"$SELECTION" | wl-copy

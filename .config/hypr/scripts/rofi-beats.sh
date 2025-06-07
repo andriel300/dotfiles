@@ -31,12 +31,13 @@ declare -A online_music=(
 	["YT - Youtube Remix 📹🎶"]="https://youtube.com/playlist?list=PLeqTkIUlrZXlSNn3tcXAa-zbo95j0iN-0"
 	["YT - Korean Drama OST 📹🎶"]="https://youtube.com/playlist?list=PLUge_o9AIFp4HuA-A3e3ZqENh63LuRRlQ"
 	["YT - Relaxing Piano Jazz Music 🎹🎶"]="https://youtu.be/85UEqRat6E4?si=jXQL1Yp2VP_G6NSn"
-	["Lofi Girl ☕️"]="https://www.youtube.com/watch?v=jfKfPfyJRdk"
-	["Chillhop ☕️"]="https://www.youtube.com/watch?v=5yx6BWlEVcY"
-	["Smooth Chill 💆"]="https://www.youtube.com/watch?v=lTRiuFIWV54"
-	["Rain Sounds 🌧️"]="https://www.youtube.com/watch?v=mPZkdNFkNps"
-	["Fireplace 🔥"]="https://www.youtube.com/watch?v=eyU3bRy2x44"
-	["Forest Sounds 🌲"]="https://www.youtube.com/watch?v=OdIJ2x3nxzQ"
+	["YT - Lofi Girl ☕️"]="https://www.youtube.com/watch?v=jfKfPfyJRdk"
+	["YT - Chillhop ☕️"]="https://www.youtube.com/watch?v=5yx6BWlEVcY"
+	["YT - Smooth Chill 💆"]="https://www.youtube.com/watch?v=lTRiuFIWV54"
+	["YT - Rain Sounds 🌧️"]="https://www.youtube.com/watch?v=mPZkdNFkNps"
+	["YT - Brown Sounds 🌪️"]="https://www.youtube.com/watch?v=0GDfOAuUvQ0"
+	["YT - Fireplace 🔥"]="https://www.youtube.com/watch?v=eyU3bRy2x44"
+	["YT - Forest Sounds 🌲"]="https://www.youtube.com/watch?v=OdIJ2x3nxzQ"
 )
 
 # 🎼 Preenche lista de músicas locais
