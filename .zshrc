@@ -29,10 +29,10 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
   --preview-window=right:60%'
 
 # Detect the AUR wrapper
-if pacman -Qi yay &>/dev/null ; then
-   aurhelper="yay"
-elif pacman -Qi paru &>/dev/null ; then
-   aurhelper="paru"
+if pacman -Qi yay &>/dev/null; then
+   export aurhelper="yay"
+elif pacman -Qi paru &>/dev/null; then
+   export aurhelper="paru"
 fi
 
 # ========== 2) Plugin Managers & Sourcing ==========
@@ -138,10 +138,9 @@ alias po2='$aurhelper -Qqd | $aurhelper -Rsu --print -pokemon-colorscripts' # te
 
 # Powerpill Update Aliases
 alias up='update-system' # Full system update (powerpill + AUR helper)
-alias ups='sudo pacman -Sy && sudo powerpill -Su && $aurhelper -Su' # Standard update
-alias upp='sudo powerpill -Su' # Update only system packages with powerpill
-alias upa='$aurhelper -Su' # Update only AUR packages
-alias upf='sudo pacman -Sy && sudo powerpill -Syu && $aurhelper -Syu' # Force refresh all
+alias ups='sudo pacman -Syu && sudo powerpill -Syu && $aurhelper -Syu' # Standard update
+alias upp='sudo powerpill -Syu' # Update only system packages with powerpill
+alias upa='$aurhelper -Syu' # Update only AUR packages
 
 # ASCII ART aliases
 alias shark='display3d ~/.config/display3d/blahaj.obj -t 0,0,5.5'
@@ -210,14 +209,14 @@ bindkey -M viins '\es' sesh-sessions
 # Smart system update with Powerpill
 update-system() {
     echo -e "\033[1;33mRefreshing package databases...\033[0m"
-    sudo pacman -Sy
+    sudo pacman -Syu
     
     echo -e "\n\033[1;33mUpdating system packages with powerpill...\033[0m"
-    sudo powerpill -Su
+    sudo powerpill -Syu
     
     if command -v paru &>/dev/null || command -v yay &>/dev/null; then
         echo -e "\n\033[1;33mUpdating AUR packages...\033[0m"
-        $aurhelper -Su
+        $aurhelper -Syu
     fi
     
     echo -e "\n\033[1;32mUpdate complete!\033[0m"

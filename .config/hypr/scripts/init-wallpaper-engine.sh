@@ -7,7 +7,7 @@
 #                                 |___/
 #
 
-wallpaper_engine=$(cat $HOME/.config/andriel/settings/wallpaper-engine.sh)
+wallpaper_engine=$(cat "$HOME"/.config/andriel/settings/wallpaper-engine.sh)
 if [ "$wallpaper_engine" == "swww" ]; then
 	# swww
 	echo ":: Using swww"
