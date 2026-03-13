@@ -3,10 +3,8 @@
 # === Diretórios e temas ===
 WALLPAPER_DIR="$HOME/.config/backgrounds/wallpapers"
 ZEN_WALLPAPER="$WALLPAPER_DIR/bkg1.png"
-ROFI_THEME="$HOME/.config/rofi/config-short.rasi"
-
 # === Menu de seleção ===
-MODE=$(echo -e "🎨 Rice Mode\n🧘 Zen Mode\n🎮 Game Mode" | rofi -dmenu -theme "$ROFI_THEME" -p "Select Mode")
+MODE=$(echo -e "🎨 Rice Mode\n🧘 Zen Mode\n🎮 Game Mode" | wofi --show dmenu --prompt "Select Mode")
 
 # === Função para trocar wallpaper ===
 set_wallpaper() {
@@ -36,7 +34,7 @@ case "$MODE" in
         keyword layerrule noanim,waybar;
         keyword layerrule noanim,swaync-notification-window;
         keyword layerrule noanim,swww-daemon;
-        keyword layerrule noanim,rofi"
+        keyword layerrule noanim,wofi"
 
 	hyprctl 'keyword windowrule opaque,class:(.*)'
 	notify-send "🎮 GAME MODE ATIVADO" "Configurações aplicadas para performance"
@@ -60,7 +58,7 @@ case "$MODE" in
         keyword layerrule noanim,waybar;
         keyword layerrule noanim,swaync-notification-window;
         keyword layerrule noanim,swww-daemon;
-        keyword layerrule noanim,rofi"
+        keyword layerrule noanim,wofi"
 
 	hyprctl 'keyword windowrule opaque,class:(.*)'
 

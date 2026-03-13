@@ -69,7 +69,7 @@ play_stream() {
 # 🎶 Play música local
 play_local_music() {
 	populate_local_music
-	choice=$(printf "%s\n" "${filenames[@]}" | rofi -dmenu -i -theme "$THEME" -p "🎵 Escolha uma música")
+	choice=$(printf "%s\n" "${filenames[@]}" | wofi --show dmenu --prompt "🎵 Escolha uma música" --insensitive)
 	[[ -z "$choice" ]] && exit 1
 
 	for i in "${!filenames[@]}"; do
@@ -90,7 +90,7 @@ shuffle_local_music() {
 # 📜 Ver histórico
 show_history() {
 	[ ! -f "$HISTORY_FILE" ] && echo "Nenhum histórico encontrado" && return
-	rofi -dmenu -i -theme "$THEME" -p "🕘 Últimos tocados" <"$HISTORY_FILE"
+	wofi --show dmenu --prompt "🕘 Últimos tocados" --insensitive <"$HISTORY_FILE"
 }
 
 # 🎛 Menu principal
@@ -104,7 +104,7 @@ main_menu() {
 
 # 🧠 Lógica principal
 main() {
-	choice=$(main_menu | rofi -dmenu -i -theme "$THEME" -p "🎶 Rofi Beats")
+	choice=$(main_menu | wofi --show dmenu --prompt "🎶 Beats" --insensitive)
 
 	# Para música atual
 	if [ -f "$PID_FILE" ] && kill -0 "$(cat "$PID_FILE")" 2>/dev/null; then
@@ -113,7 +113,7 @@ main() {
 
 	case "$choice" in
 	"🎧 Online Music")
-		stream=$(printf "%s\n" "${!online_music[@]}" | sort | rofi -dmenu -i -theme "$THEME" -p "📻 Online Radios")
+		stream=$(printf "%s\n" "${!online_music[@]}" | sort | wofi --show dmenu --prompt "📻 Online Radios" --insensitive)
 		[[ -z "$stream" ]] && exit 0
 		play_stream "${online_music[$stream]}" "$stream"
 		;;
@@ -126,7 +126,7 @@ main() {
 }
 
 # 🧪 Verifica dependências
-for cmd in mpv rofi notify-send; do
+for cmd in mpv wofi notify-send; do
 	command -v "$cmd" &>/dev/null || {
 		echo "Erro: '$cmd' não encontrado"
 		exit 1

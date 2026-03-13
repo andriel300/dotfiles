@@ -15,7 +15,7 @@ THEMES=(
 )
 
 # Get user selection
-SELECTED_THEME=$(printf "%s\n" "${THEMES[@]}" | rofi -dmenu -p "" -theme ~/.config/rofi/border-theme.rasi)
+SELECTED_THEME=$(printf "%s\n" "${THEMES[@]}" | wofi --show dmenu --prompt "")
 
 if [[ -z "$SELECTED_THEME" ]]; then
 	exit 0

@@ -2,7 +2,7 @@
 # │          SECTION: FONT           │
 # └───────────────────────────────────┘
 font-family = MonoLisa
-font-size = 10
+font-size = 12
 font-feature = ss08, ss07, calt, liga, ss12, ss09, ss02
 
 # ┌───────────────────────────────────┐
@@ -47,7 +47,7 @@ alpha-blending = native
 # custom-shader = shaders/bloom075.glsl
 # custom-shader = shaders/bloom060.glsl
 # custom-shader = shaders/bloom050.glsl
-custom-shader = shaders/bloom025.glsl
+# custom-shader = shaders/bloom025.glsl
 # custom-shader = shaders/bloom050.glsl
 # custom-shader = shaders/bloom060.glsl
 # custom-shader = shaders/bloom075.glsl
@@ -75,7 +75,7 @@ custom-shader = shaders/bloom025.glsl
 # custom-shader = shaders/tft.glsl
 # custom-shader = shaders/underwater.glsl
 # custom-shader = shaders/water.glsl
-custom-shader = shaders/cursor_blaze.glsl
+# custom-shader = shaders/cursor_blaze.glsl
 # custom-shader = shaders/cursor_blaze_no_trail.glsl
 custom-shader = shaders/cursor_smear.glsl
 # custom-shader = shaders/cursor_smear_fade.glsl

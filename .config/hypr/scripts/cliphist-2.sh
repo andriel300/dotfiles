@@ -4,10 +4,10 @@ scripts_dir=$HOME/.config/hypr/scripts
 
 case $1 in
 c)
-	cliphist list | rofi -dmenu -theme-str "entry { placeholder: \" Search Clipboard\";} ${pos} ${r_override}" -theme-str "${fnt_override}" -config ~/.config/rofi/config-cliphist.rasi | cliphist decode | wl-copy
+	cliphist list | wofi --show dmenu --prompt "Search Clipboard" | cliphist decode | wl-copy
 	;;
 w)
-	if [ "$(echo -e "Yes\nNo" | rofi -dmenu -theme-str "entry { placeholder: \" Clear Clipboard History?\";} ${pos} ${r_override}" -theme-str "${fnt_override}" -config ~/.config/rofi/themes/rofi-clipboard.rasi)" == "Yes" ]; then
+	if [ "$(echo -e "Yes\nNo" | wofi --show dmenu --prompt "Clear Clipboard History?")" == "Yes" ]; then
 		cliphist wipe
 	fi
 	;;

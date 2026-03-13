@@ -35,4 +35,4 @@ done <"$config_file"
 
 # Display keybindings in rofi
 sleep 0.2
-echo -e "$keybinds" | rofi -dmenu -i -markup -eh 2 -replace -p "Keybinds" -config ~/.config/rofi/config-compact.rasi
+echo -e "$keybinds" | wofi --show dmenu --prompt "Keybinds" --insensitive

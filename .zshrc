@@ -133,13 +133,13 @@ alias un='$aurhelper -Rns' # uninstall package
 alias pl='$aurhelper -Qs' # list installed package
 alias pa='$aurhelper -Ss' # list available package
 alias pc='$aurhelper -Sc' # remove unused cache
+alias pcc='$aurhelper -Scc' # full clean cache
 alias po='$aurhelper -Qtdq | $aurhelper -Rns -' # remove unused packages
 alias po2='$aurhelper -Qqd | $aurhelper -Rsu --print -pokemon-colorscripts' # testing
 
 # Powerpill Update Aliases
 alias up='update-system' # Full system update (powerpill + AUR helper)
-alias ups='sudo pacman -Syu && sudo powerpill -Syu && $aurhelper -Syu' # Standard update
-alias upp='sudo powerpill -Syu' # Update only system packages with powerpill
+alias ups='$aurhelper -Syu --noconfirm --removemake --cleanafter' # awesome update
 alias upa='$aurhelper -Syu' # Update only AUR packages
 
 # ASCII ART aliases
@@ -205,47 +205,6 @@ zle     -N             sesh-sessions
 bindkey -M emacs '\es' sesh-sessions
 bindkey -M vicmd '\es' sesh-sessions
 bindkey -M viins '\es' sesh-sessions
-
-# Smart system update with Powerpill
-update-system() {
-    echo -e "\033[1;33mRefreshing package databases...\033[0m"
-    sudo pacman -Syu
-    
-    echo -e "\n\033[1;33mUpdating system packages with powerpill...\033[0m"
-    sudo powerpill -Syu
-    
-    if command -v paru &>/dev/null || command -v yay &>/dev/null; then
-        echo -e "\n\033[1;33mUpdating AUR packages...\033[0m"
-        $aurhelper -Syu
-    fi
-    
-    echo -e "\n\033[1;32mUpdate complete!\033[0m"
-}
-
-# Package installation with automatic Arch/AUR detection
-function in {
-    local -a inPkg=("$@")
-    local -a arch=()
-    local -a aur=()
-
-    for pkg in "${inPkg[@]}"; do
-        if pacman -Si "${pkg}" &>/dev/null ; then
-            arch+=("${pkg}")
-        else 
-            aur+=("${pkg}")
-        fi
-    done
-
-    if [[ ${#arch[@]} -gt 0 ]]; then
-        echo -e "\033[1;33mInstalling system packages with powerpill...\033[0m"
-        sudo powerpill -S "${arch[@]}"
-    fi
-
-    if [[ ${#aur[@]} -gt 0 ]] && { command -v paru &>/dev/null || command -v yay &>/dev/null; }; then
-        echo -e "\033[1;33mInstalling AUR packages...\033[0m"
-        $aurhelper -S "${aur[@]}"
-    fi
-}
 
 # bun completions
 [ -s "/home/diel/.bun/_bun" ] && source "/home/diel/.bun/_bun"

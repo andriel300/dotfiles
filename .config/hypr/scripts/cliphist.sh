@@ -23,8 +23,8 @@ CLIPHIST_ENTRIES=$(cliphist list | gawk -v tmp="$TMP_DIR" '
     { print }
 ')
 
-# Use rofi with icon support
-SELECTION=$(echo -e "$CLIPHIST_ENTRIES" | rofi -dmenu -show-icons -config ~/.config/rofi/config-cliphist.rasi)
+# Use wofi dmenu
+SELECTION=$(echo -e "$CLIPHIST_ENTRIES" | wofi --show dmenu --prompt "Clipboard")
 
 # Decode and copy selected entry
 [[ -n "$SELECTION" ]] && cliphist decode <<<"$SELECTION" | wl-copy

@@ -4,8 +4,8 @@
 wall_dir="${HOME}/.config/backgrounds/wallpapers"
 # Cache directory for processed thumbnails
 cache_dir="${HOME}/.cache/wallpaper_thumbnails"
-# Rofi command with theme
-rofi_command="rofi -dmenu -theme ${HOME}/.config/rofi/wallpaper_selector.rasi"
+# Wofi command
+rofi_command="wofi --show dmenu --prompt Wallpaper"
 
 # Create cache directory if it doesn't exist
 mkdir -p "${cache_dir}"
