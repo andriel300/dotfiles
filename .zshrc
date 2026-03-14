@@ -17,16 +17,14 @@ export ZSH="$HOME/.oh-my-zsh"
 # Path to your oh-my-zsh installation if installed zsh using pacman.
 #ZSH=/usr/share/oh-my-zsh/
 
-# FZF Plugin styling
 export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
-  --color=fg:#ebfafa,fg+:#ebfafa,bg:#282a36,bg+:#212337
-  --color=hl:#34f499,hl+:#37f499,info:#f7c67f,marker:#7081d0
-  --color=prompt:#01d1f9,spinner:#f7c67f,pointer:#7081d0,header:#323449
-  --color=border:#ebfafa,label:#ebfafa,query:#d9d9d9
-  --border="sharp" --border-label="" --preview-window="border-sharp" --prompt="» "
-  --marker=">" --pointer="◆" --separator="─" --scrollbar="│"
-  --preview="bat --style=numbers,changes --color=always {}"
-  --preview-window=right:60%'
+  --color=fg:#d0c6a5,fg+:#efead9,bg:-1,bg+:#25262C
+  --color=hl:#fb982e,hl+:#dd4e21,info:#d0c6a5,marker:#ffd072
+  --color=prompt:#fb982e,spinner:#52a260,pointer:#cd80b9,header:#9cd750
+  --color=gutter:#25262c,border:#878080,label:#d0c6a5,query:#efead9:regular
+  --color=disabled:#404146
+  --border="sharp" --border-label="" --preview-window="border-rounded" --prompt="» "
+  --marker=">" --pointer="◆" --separator="─" --scrollbar="│"'
 
 # Detect the AUR wrapper
 if pacman -Qi yay &>/dev/null; then
@@ -115,7 +113,10 @@ zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
 # Shell integrations
 eval "$(atuin init zsh)"
 eval "$(fzf --zsh)"
-eval "$(zoxide init --cmd cd zsh)"
+
+if [ -z "$DISABLE_ZOXIDE" ]; then
+    eval "$(zoxide init --cmd cd zsh)"
+fi
 
 # Aliases
 alias ls='eza --icons --color=auto --sort=type --group-directories-first --header --classify --modified --created --git --binary --group'
@@ -239,3 +240,7 @@ export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 export PATH=$PATH:/home/diel/.spicetify
+
+. "$HOME/.local/share/../bin/env"
+
+export PATH="$HOME/.local/bin:$PATH"
