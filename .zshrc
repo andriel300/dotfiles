@@ -171,7 +171,60 @@ SCREENRC="$XDG_CONFIG_HOME"/screen/screenrc
 export XDG_CONFIG_HOME XDG_CONFIG_DIR XDG_DATA_HOME XDG_STATE_HOME XDG_CACHE_HOME XDG_DESKTOP_DIR XDG_DOWNLOAD_DIR \
     XDG_TEMPLATES_DIR XDG_PUBLICSHARE_DIR XDG_DOCUMENTS_DIR XDG_MUSIC_DIR XDG_PICTURES_DIR XDG_VIDEOS_DIR WGETRC SCREENRC
 
+# --- SAFETY WRAPPERS ---
 
+# Safe rm (backup in case safe-rm isn't installed or for specific flags)
+rm() {
+    # Block root
+    if [[ "$@" == "/" ]] || [[ "$@" == "/*" ]]; then
+        echo "ERROR: rm root is blocked."
+        return 1
+    fi
+    
+    # Warning for Home
+    if [[ "$@" == *"$HOME"* ]] || [[ "$@" == *""~""* ]]; then
+        read -p "WARNING: You are trying to delete your home directory. Confirm? (y/N) " confirm
+        if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
+            echo "Cancelled."
+            return 1
+        fi
+    fi
+
+    # Delay for wildcard (rm *)
+    if [[ "$@" == *"*"* ]]; then
+        echo "Waiting 3 seconds before deleting with wildcard..."
+        sleep 3
+    fi
+
+    command rm "$@"
+}
+
+# Safe dd - Requires confirmation
+dd() {
+    echo "WARNING: You are about to run 'dd' which can wipe drives."
+    echo "Target: $@"
+    read -p "Are you sure? (y/N) " confirm
+    if [[ "$confirm" == "y" || "$confirm" == "Y" ]]; then
+        command dd "$@"
+    else
+        echo "Cancelled."
+    fi
+}
+
+# Safe chmod/chown - Warning recursive
+chmod() {
+    if [[ "$@" == *"-R"* ]]; then
+        echo "WARNING: Recursive chmod detected."
+    fi
+    command chmod "$@"
+}
+
+chown() {
+    if [[ "$@" == *"-R"* ]]; then
+        echo "WARNING: Recursive chown detected."
+    fi
+    command chown "$@"
+}
 # Functions
 
 # shell wrapper ability to change the current working directory when exiting Yazi.
@@ -244,3 +297,14 @@ export PATH=$PATH:/home/diel/.spicetify
 . "$HOME/.local/share/../bin/env"
 
 export PATH="$HOME/.local/bin:$PATH"
+alias lzd='lazydocker'
+
+if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi
+
+# pnpm
+export PNPM_HOME="/home/diel/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
