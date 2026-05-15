@@ -9,9 +9,9 @@ hl.config({
 		allow_tearing = true,
 		layout = "scrolling",
 
-		-- ["col.active_border"] = "rgb(8aadf4) rgb(24273A) rgb(24273A) rgb(8aadf4) 45deg",
-		-- ["col.inactive_border"] = "rgb(24273A) rgb(24273A) rgb(24273A) rgb(27273A) 45deg",
-		["col.active_border"] = "rgb(24273A)",
+		-- col = { active_border = "rgb(8aadf4) rgb(24273A) rgb(24273A) rgb(8aadf4) 45deg" },
+		-- col = { inactive_border = "rgb(24273A) rgb(24273A) rgb(24273A) rgb(27273A) 45deg" },
+		col = { active_border = "rgb(24273A)" },
 	},
 
 	decoration = {
@@ -25,7 +25,6 @@ hl.config({
 
 		shadow = {
 			enabled = true,
-			ignore_window = true,
 			range = 20,
 			render_power = 3,
 			color = "0x66000000",
@@ -50,12 +49,8 @@ hl.config({
 	},
 
 	misc = {
-		vfr = 1,
 		-- controls the VRR (Adaptive Sync) of your monitors.
-		-- 0: off
-		-- 1: on
-		-- 2: fullscreen only
-		-- 3: fullscreen with video or game content type
+		-- 0: off, 1: on, 2: fullscreen only, 3: fullscreen with video or game content type
 		vrr = 2,
 		animate_manual_resizes = false,
 		animate_mouse_windowdragging = false,

@@ -61,11 +61,11 @@ hl.bind(mainMod .. " + ccedilla",   hl.dsp.exec_cmd(scripts .. "/toggle-lang.sh"
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(scripts .. "/close.sh"))
 hl.bind(mainMod .. " + T", hl.dsp.window.float())
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ mode = "fullscreen" }))
-hl.bind(mainMod .. " + G", hl.dsp.window.toggle_group())
+hl.bind(mainMod .. " + G", hl.dsp.exec_cmd("hyprctl dispatch togglegroup"))
 
 -- Mouse-driven window management
-hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag())
-hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize())
+hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
+hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
 -- Keyboard resize (pixel-based)
 hl.bind(mainMod .. " + SHIFT + right", hl.dsp.window.resize({ x =  100, y =    0, relative = true }))
@@ -112,21 +112,21 @@ hl.bind("CTRL + PRINT",  hl.dsp.exec_cmd(scripts .. "/omarchy-cmd-screenshot out
 -- Workspace Management
 -- ════════════════════════════════════════════════
 
--- Workspaces 1–9 via loop; workspace 0 → 10 handled separately
+-- Workspaces 1–9 via loop; key 0 → workspace 10
 for i = 1, 9 do
-    hl.bind(mainMod .. " + " .. i,               hl.dsp.exec_cmd(scripts .. "/switch_workspace.sh " .. i))
-    hl.bind(mainMod .. " + SHIFT + " .. i,       hl.dsp.window.move({ workspace = i }))
-    hl.bind(mainMod .. " + CTRL + " .. i,        hl.dsp.exec_cmd(scripts .. "/moveTo.sh " .. i))
+    hl.bind(mainMod .. " + " .. i,         hl.dsp.focus({ workspace = i }))
+    hl.bind(mainMod .. " + SHIFT + " .. i, hl.dsp.window.move({ workspace = i }))
+    hl.bind(mainMod .. " + CTRL + " .. i,  hl.dsp.exec_cmd(scripts .. "/moveTo.sh " .. i))
 end
 
-hl.bind(mainMod .. " + 0",         hl.dsp.exec_cmd(scripts .. "/switch_workspace.sh 10"))
+hl.bind(mainMod .. " + 0",         hl.dsp.focus({ workspace = 10 }))
 hl.bind(mainMod .. " + SHIFT + 0", hl.dsp.window.move({ workspace = 10 }))
 hl.bind(mainMod .. " + CTRL + 0",  hl.dsp.exec_cmd(scripts .. "/moveTo.sh 10"))
 
 -- Workspace cycling
-hl.bind(mainMod .. " + mouse_down",  hl.dsp.workspace.switch("e+1"))
-hl.bind(mainMod .. " + mouse_up",    hl.dsp.workspace.switch("e-1"))
-hl.bind(mainMod .. " + CTRL + down", hl.dsp.workspace.switch("empty"))
+hl.bind(mainMod .. " + mouse_down",  hl.dsp.focus({ workspace = "e+1" }))
+hl.bind(mainMod .. " + mouse_up",    hl.dsp.focus({ workspace = "e-1" }))
+hl.bind(mainMod .. " + CTRL + down", hl.dsp.focus({ workspace = "empty" }))
 
 
 -- ════════════════════════════════════════════════
@@ -159,7 +159,7 @@ hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"))
 
 -- System keys
 hl.bind("XF86Calculator", hl.dsp.exec_cmd("qalculate-gtk"))
-hl.bind("XF86Lock",       hl.dsp.exec_cmd("hyprlock"))
+-- XF86Lock keysym not available on this system; use SUPER+ALT+L instead
 
 -- Keyboard backlight (SMC devices)
 hl.bind("code:238", hl.dsp.exec_cmd("brightnessctl -d smc::kbd_backlight s +10"))

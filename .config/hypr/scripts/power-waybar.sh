@@ -11,7 +11,7 @@ case $1 in
 	;;
 --logout)
 	"$HOME/.config/hypr/scripts/uptime.sh" && sleep 3
-	hyprctl dispatch exit 0
+	hyprctl exit
 	;;
 --lock)
 	hyprlock

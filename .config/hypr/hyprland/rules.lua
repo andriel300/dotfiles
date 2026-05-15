@@ -1,6 +1,3 @@
--- Translated from conf.d/06-rules.conf
--- Note: multi-value opacity uses {active, inactive} or {active, inactive, fullscreen} tables
-
 -- ══════════════════════════════════════════════
 -- WINDOW RULES
 -- ══════════════════════════════════════════════
@@ -19,9 +16,9 @@ hl.window_rule({
 	match = { class = "(it.mijorus.smile)" },
 	float = true,
 	pin = true,
-	move = "((monitor_w*1)-window_w-40) (90)",
+	move = "(monitor_w - window_w - 40) 90",
 })
-hl.window_rule({ match = { class = "^(it.mijorus.smile)$" }, opacity = { 0.70, 0.70, 1.0 } })
+hl.window_rule({ match = { class = "^(it.mijorus.smile)$" }, opacity = "0.70 0.70 1.0" })
 
 -- Pavucontrol
 hl.window_rule({
@@ -34,14 +31,14 @@ hl.window_rule({
 
 -- qbittorrent
 hl.window_rule({ match = { class = "(org.qbittorrent.qBittorrent)" }, float = true, size = { 1280, 720 } })
-hl.window_rule({ match = { title = "^Remove torrent\\(s\\)$" }, float = true, size = { 900, 500 }, move = "center" })
+hl.window_rule({ match = { title = "^Remove torrent\\(s\\)$" }, float = true, size = { 900, 500 }, center = true })
 
 -- qalculate-gtk
 hl.window_rule({
 	match = { class = "(qalculate-gtk)" },
 	float = true,
 	size = { 700, 600 },
-	opacity = { 0.70, 0.70 },
+	opacity = "0.70 0.70",
 	center = true,
 })
 
@@ -57,9 +54,9 @@ hl.window_rule({
 	match = { title = "^(Picture-in-Picture)$" },
 	float = true,
 	pin = true,
-	move = "((monitor_w*1)-785) ((monitor_h*1)-486)",
+	move = "(monitor_w - 785) (monitor_h - 486)",
 	size = { 785, 486 },
-	opacity = { 1.0, 1.0 },
+	opacity = "1.0 1.0",
 	keep_aspect_ratio = true,
 })
 
@@ -81,23 +78,23 @@ hl.window_rule({
 hl.window_rule({ match = { class = "^steam_app\\d+$" }, fullscreen = true })
 hl.window_rule({ match = { class = "^steam_app_\\d+$" }, monitor = 1, workspace = "10" })
 
-hl.workspace_rule({ workspace = "10", border = false, rounding = false })
+hl.workspace_rule({ workspace = "10", border_size = 0 })
+hl.window_rule({ match = { workspace = "10" }, rounding = 0 })
 
 hl.window_rule({
 	match = { class = "^(steamwebhelper)$" },
 	float = true,
 	size = { 800, 600 },
 	center = true,
-	opacity = { 0.80, 0.80, 1.0 },
+	opacity = "0.80 0.80 1.0",
 })
-hl.window_rule({ match = { class = "^([Ss]team)$", title = "^((?![Ss]team).*)$" }, float = true })
 hl.window_rule({
 	match = { class = "^([Ss]team)$", title = "^([Ss]team)$" },
 	workspace = "3 silent",
 	tile = true,
 })
 hl.window_rule({ match = { class = "^([Ss]team)$", title = "negative:^([Ss]team)$" }, float = true })
-hl.window_rule({ match = { class = "^([Ss]team)$" }, opacity = { 0.80, 0.80, 1.0 } })
+hl.window_rule({ match = { class = "^([Ss]team)$" }, opacity = "0.80 0.80 1.0" })
 
 -- Media
 hl.window_rule({ match = { class = "^(vlc)$" }, idle_inhibit = "always" })
@@ -117,25 +114,25 @@ hl.window_rule({ match = { class = "^(qt5ct)$" }, float = true })
 hl.window_rule({ match = { class = "^(qt6ct)$" }, float = true })
 hl.window_rule({
 	match = { class = "^(org.kde.polkit-kde-authentication-agent-1)$" },
-	opacity = { 0.80, 0.70, 1.0 },
+	opacity = "0.80 0.70 1.0",
 	float = true,
 })
-hl.window_rule({ match = { class = "^(polkit-gnome-authentication-agent-1)$" }, opacity = { 0.80, 0.70, 1.0 } })
+hl.window_rule({ match = { class = "^(polkit-gnome-authentication-agent-1)$" }, opacity = "0.80 0.70 1.0" })
 
 -- YAD
 hl.window_rule({
 	match = { class = "^(yad)$" },
 	float = true,
-	opacity = { 0.80, 0.80 },
-	move = "((monitor_w*0.44)) ((monitor_h*0.04))",
+	opacity = "0.80 0.80",
+	move = "(monitor_w * 0.44) (monitor_h * 0.04)",
 })
 
 -- GNOME Calendar
 hl.window_rule({
 	match = { class = "^(org.gnome.Calendar)$" },
 	float = true,
-	opacity = { 0.85, 0.85 },
-	move = "((monitor_w*0.3)) ((monitor_h*0.04))",
+	opacity = "0.85 0.85",
+	move = "(monitor_w * 0.3) (monitor_h * 0.04)",
 })
 
 -- Common file dialogs / modals
@@ -148,15 +145,15 @@ hl.window_rule({ match = { title = "^(File Operation Progress)$" }, float = true
 hl.window_rule({ match = { class = "^(xdg-desktop-portal-gtk)$" }, float = true })
 
 -- Spotify
-hl.window_rule({ match = { initial_title = "^(Spotify Free)$" }, opacity = { 0.80, 0.80, 1.0 } })
-hl.window_rule({ match = { initial_title = "^(Spotify Premium)$" }, opacity = { 0.80, 0.80, 1.0 } })
-hl.window_rule({ match = { class = "^(Spotify)$" }, opacity = { 0.80, 0.80, 1.0 } })
+hl.window_rule({ match = { initial_title = "^(Spotify Free)$" }, opacity = "0.80 0.80 1.0" })
+hl.window_rule({ match = { initial_title = "^(Spotify Premium)$" }, opacity = "0.80 0.80 1.0" })
+hl.window_rule({ match = { class = "^(Spotify)$" }, opacity = "0.80 0.80 1.0" })
 
 -- Discord / Vesktop
-hl.window_rule({ match = { class = "^(vesktop)$" }, opacity = { 0.80, 0.80 }, workspace = "2 silent" })
-hl.window_rule({ match = { class = "^(discord)$" }, opacity = { 0.80, 0.80 } })
-hl.window_rule({ match = { class = "^(WebCord)$" }, opacity = { 0.80, 0.80 } })
-hl.window_rule({ match = { class = "^(ArmCord)$" }, opacity = { 0.80, 0.80 } })
+hl.window_rule({ match = { class = "^(vesktop)$" }, opacity = "0.80 0.80", workspace = "2 silent" })
+hl.window_rule({ match = { class = "^(discord)$" }, opacity = "0.80 0.80" })
+hl.window_rule({ match = { class = "^(WebCord)$" }, opacity = "0.80 0.80" })
+hl.window_rule({ match = { class = "^(ArmCord)$" }, opacity = "0.80 0.80" })
 
 -- nwg
 hl.window_rule({ match = { class = "^(nwg-look)$" }, float = true })
@@ -164,20 +161,20 @@ hl.window_rule({
 	match = { class = "(nwg-displays)" },
 	float = true,
 	size = { 700, 600 },
-	move = "((monitor_w*0.1)) ((monitor_h*0.2))",
+	move = "(monitor_w * 0.1) (monitor_h * 0.2)",
 	pin = true,
 })
 
 -- Misc apps
-hl.window_rule({ match = { class = "^(com.rtosta.zapzap)$" }, opacity = { 0.90, 0.90 } })
-hl.window_rule({ match = { class = "^(org.kde.dolphin)$" }, opacity = { 0.80, 0.80, 1.0 } })
-hl.window_rule({ match = { class = "^(org.kde.ark)$" }, opacity = { 0.80, 0.80, 1.0 }, float = true })
-hl.window_rule({ match = { class = "^(org.qbittorrent.qBittorrent)$" }, opacity = { 0.70, 0.70 } })
+hl.window_rule({ match = { class = "^(com.rtosta.zapzap)$" }, opacity = "0.90 0.90" })
+hl.window_rule({ match = { class = "^(org.kde.dolphin)$" }, opacity = "0.80 0.80 1.0" })
+hl.window_rule({ match = { class = "^(org.kde.ark)$" }, opacity = "0.80 0.80 1.0", float = true })
+hl.window_rule({ match = { class = "^(org.qbittorrent.qBittorrent)$" }, opacity = "0.70 0.70" })
 
 -- Nautilus
 hl.window_rule({
 	match = { class = "^(org.gnome.Nautilus)" },
-	opacity = { 0.70, 0.70 },
+	opacity = "0.70 0.70",
 	float = true,
 	size = { 950, 720 },
 })
@@ -185,7 +182,7 @@ hl.window_rule({
 -- Thunar
 hl.window_rule({
 	match = { class = "^([Tt]hunar)" },
-	opacity = { 0.70, 0.70 },
+	opacity = "0.70 0.70",
 	float = true,
 	size = { 950, 720 },
 })
@@ -193,8 +190,8 @@ hl.window_rule({ match = { class = "([Tt]hunar)", title = "(File Operation Progr
 hl.window_rule({ match = { class = "([Tt]hunar)", title = "(Confirm to replace files)" }, center = true })
 
 -- Portals
-hl.window_rule({ match = { class = "^(org.freedesktop.impl.portal.desktop.gtk)$" }, opacity = { 0.80, 0.70, 1.0 } })
-hl.window_rule({ match = { class = "^(org.freedesktop.impl.portal.desktop.hyprland)$" }, opacity = { 0.80, 0.70, 1.0 } })
+hl.window_rule({ match = { class = "^(org.freedesktop.impl.portal.desktop.gtk)$" }, opacity = "0.80 0.70 1.0" })
+hl.window_rule({ match = { class = "^(org.freedesktop.impl.portal.desktop.hyprland)$" }, opacity = "0.80 0.70 1.0" })
 
 -- Dolphin dialogs
 hl.window_rule({ match = { class = "^(org.kde.dolphin)$", title = "^(Progress Dialog — Dolphin)$" }, float = true })
@@ -237,13 +234,13 @@ hl.window_rule({
 	float = true,
 	size = { 800, 600 },
 	pin = true,
-	move = "((monitor_w*1)-window_w-40) (90)",
-	opacity = { 0.90, 0.90 },
+	move = "(monitor_w - window_w - 40) 90",
+	opacity = "0.90 0.90",
 })
 
 -- EasyEffects / Fediverse
-hl.window_rule({ match = { class = "^(com.github.wwmm.easyeffects)$" }, opacity = { 0.90, 0.90 } })
-hl.window_rule({ match = { class = "^(org.fagram.desktop)$" }, opacity = { 0.90, 0.90 } })
+hl.window_rule({ match = { class = "^(com.github.wwmm.easyeffects)$" }, opacity = "0.90 0.90" })
+hl.window_rule({ match = { class = "^(org.fagram.desktop)$" }, opacity = "0.90 0.90" })
 
 -- Bottles
 hl.window_rule({ match = { class = "(com.usebottles.bottles)" }, float = true, size = { 800, 600 } })
@@ -268,8 +265,8 @@ hl.window_rule({
 })
 
 -- SwayNC windows
-hl.window_rule({ match = { class = "(swaync-control-center)" }, opacity = { 0.80, 0.80 } })
-hl.window_rule({ match = { class = "(swaync)" }, opacity = { 0.80, 0.80 } })
+hl.window_rule({ match = { class = "(swaync-control-center)" }, opacity = "0.80 0.80" })
+hl.window_rule({ match = { class = "(swaync)" }, opacity = "0.80 0.80" })
 
 -- Personal project
 hl.window_rule({ match = { class = "^(secure-password-cli)$" }, float = true, size = { 600, 400 } })
@@ -297,6 +294,7 @@ hl.window_rule({ match = { class = "^(steam)$", title = "^(notificationtoasts)" 
 
 -- xdg-desktop-portal
 hl.window_rule({ match = { class = "^(xdg-desktop-portal)$" }, float = true })
+
 
 -- ══════════════════════════════════════════════
 -- LAYER RULES
