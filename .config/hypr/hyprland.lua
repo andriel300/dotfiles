@@ -1,0 +1,8 @@
+require("hyprland.animations")
+require("hyprland.binds")
+require("hyprland.env")
+require("hyprland.gestures")
+require("hyprland.monitors")
+require("hyprland.rules")
+require("hyprland.settings")
+require("hyprland.startup")
