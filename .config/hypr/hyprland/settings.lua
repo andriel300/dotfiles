@@ -61,6 +61,8 @@ hl.config({
 		allow_session_lock_restore = true,
 		initial_workspace_tracking = 1,
 		focus_on_activate = true,
+
+		always_follow_on_dnd = true,
 	},
 
 	render = {
@@ -80,6 +82,8 @@ hl.config({
 		kb_options = "",
 		kb_rules = "",
 		numlock_by_default = true,
+		float_switch_override_focus = 0,
+		focus_on_close = 1,
 		repeat_delay = 250,
 		repeat_rate = 35,
 		follow_mouse = 1,
@@ -108,7 +112,26 @@ hl.config({
 		enabled = true,
 		force_zero_scaling = true,
 	},
+
+	debug = {
+		-- controls the VFR status of Hyprland. Heavily recommended to leave enabled to conserve resources.
+		vfr = true,
+	},
 })
 
--- NOTE: device blocks need hl.device() — verify syntax before enabling
 hl.device({ name = "epic-mouse-v1", sensitivity = -0.5 })
+
+hl.config({
+	scrolling = {
+		fullscreen_on_one_column = true,
+		column_width = 0.9,
+		direction = "right",
+		focus_fit_method = 1,
+		follow_focus = true,
+		explicit_column_widths = "0.333, 0.5, 0.667, 1.0",
+	},
+})
+
+-- Global dispatcher aliases so external tools (e.g. DMS) can call
+-- `hyprctl dispatch exit` without Lua parse errors in 0.55+
+exit = hl.dsp.exit()
