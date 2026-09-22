@@ -1,0 +1,502 @@
+Arch Linux + GRUB + Secure Boot (sbctl) Troubleshooting Notes
+=================================================================
+
+Purpose
+-------
+Working notes for this machine's Arch Linux + Windows 11 dual-boot setup using:
+- UEFI firmware
+- GRUB
+- Secure Boot
+- sbctl custom keys + Microsoft vendor keys
+- Btrfs root subvolume @
+- Timeshift + grub-btrfs snapshots
+
+KNOWN WORKING STATE
+-------------------
+ESP mount:
+  /efi
+
+GRUB EFI:
+  /efi/EFI/GRUB/grubx64.efi
+
+Active GRUB configuration:
+  /boot/grub/grub.cfg
+
+Linux kernel:
+  /boot/vmlinuz-linux
+
+Secure Boot status after the fix:
+  sudo sbctl status
+    Secure Boot: ✓ Enabled
+    Setup Mode:  ✓ Disabled
+    Vendor Keys: microsoft
+
+  mokutil --sb-state
+    SecureBoot enabled
+
+
+THE PROBLEM
+-----------
+GRUB itself could start with Secure Boot enabled, but selecting Arch Linux failed with:
+
+  verification requested but nobody cares:
+  /@/boot/vmlinuz-linux
+
+followed by:
+
+  you need to load the kernel first
+
+Earlier attempts also failed while loading external GRUB modules such as:
+
+  normal.mod
+  all_video.mod
+  efi_gop.mod
+  test.mod
+
+One additional issue was that GRUB was actually using:
+
+  /boot/grub/grub.cfg
+
+while a newer configuration had initially been generated at:
+
+  /efi/EFI/GRUB/grub.cfg
+
+The old /boot/grub/grub.cfg still requested legacy video modules such as
+all_video, vbe, vga and ieee1275_fb.
+
+
+ROOT CAUSE
+----------
+This is a shimless/custom-CA Secure Boot configuration.
+
+The GRUB image used:
+
+  --disable-shim-lock
+
+but Secure Boot lockdown still applied. The image initially did not have the
+TPM module available early enough for the verifier path, producing:
+
+  verification requested but nobody cares
+
+The final repair embedded tpm plus all modules needed by this machine's actual
+GRUB configuration.
+
+The kernel and GRUB EFI were already signed with the custom db key, but a valid
+signature alone did not solve the incomplete GRUB verifier/module setup.
+
+
+WORKING GRUB-INSTALL COMMAND
+----------------------------
+IMPORTANT:
+Running grub-install replaces /efi/EFI/GRUB/grubx64.efi.
+The new file MUST be signed again with sbctl before rebooting with Secure Boot
+enabled.
+
+Working command:
+
+sudo grub-install \
+  --target=x86_64-efi \
+  --efi-directory=/efi \
+  --boot-directory=/boot \
+  --bootloader-id=GRUB \
+  --no-nvram \
+  --disable-shim-lock \
+  --modules="tpm btrfs fat chain part_msdos linux search configfile loadenv bli gfxmenu png echo test all_video efifwsetup"
+
+Why these options matter:
+
+  --target=x86_64-efi
+      Install the 64-bit UEFI version of GRUB.
+
+  --efi-directory=/efi
+      The EFI System Partition is mounted at /efi.
+
+  --boot-directory=/boot
+      GRUB support files/configuration live under /boot/grub.
+
+  --bootloader-id=GRUB
+      Uses EFI/GRUB/grubx64.efi on the ESP.
+
+  --no-nvram
+      Do not rewrite the already-working UEFI firmware boot entry.
+
+  --disable-shim-lock
+      This setup boots GRUB directly and does not use shim.
+
+  --modules=...
+      Embeds the modules needed by this configuration. Most importantly, tpm
+      is embedded for the shimless CA-key Secure Boot path.
+
+
+MODULES / FEATURES
+------------------
+Important explicit modules:
+
+  tpm
+      Critical to the working Secure Boot configuration.
+
+  btrfs
+      Required for the Arch root filesystem and Btrfs snapshots.
+
+  linux
+      Linux kernel/initramfs boot commands.
+
+  fat + chain
+      Needed for Windows Boot Manager chainloading from its FAT ESP.
+
+  search
+      Device/filesystem discovery.
+
+  configfile
+      Used for additional GRUB configurations such as grub-btrfs.
+
+  loadenv
+      GRUB environment support.
+
+  bli
+      Boot Loader Interface support; also depends on tpm.
+
+  gfxmenu + png
+      GRUB graphical theme.
+
+  all_video
+      Required by the existing snapshot-generated configuration.
+
+  efifwsetup
+      UEFI Firmware Settings menu entry.
+
+GRUB automatically embeds recursive dependencies. In the successful build,
+the explicit module list resolved to 58 embedded modules.
+
+
+ACTIVE GRUB CONFIGURATION
+-------------------------
+The EFI image's embedded prefix resolves to:
+
+  (,gpt6)/@/boot/grub
+
+Therefore the active external configuration is:
+
+  /boot/grub/grub.cfg
+
+When changing GRUB settings, regenerate THIS file:
+
+  sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+Do not assume /efi/EFI/GRUB/grub.cfg is the active configuration.
+
+
+VIDEO MODULE FIX
+----------------
+/etc/default/grub contains:
+
+  GRUB_VIDEO_BACKEND=efi_gop
+
+After regenerating /boot/grub/grub.cfg, the main configuration no longer
+requested these problematic legacy modules:
+
+  all_video
+  vbe
+  vga
+  ieee1275_fb
+
+Verification command:
+
+  sudo grep -nE 'insmod (all_video|vbe|vga|ieee1275_fb)' /boot/grub/grub.cfg
+
+For the main config this should normally produce no output.
+
+Note:
+grub-btrfs snapshot-generated configuration can still use all_video, which is
+why all_video was embedded in the final GRUB EFI image.
+
+
+SIGNING AFTER GRUB-INSTALL
+--------------------------
+ALWAYS sign the newly generated GRUB EFI after running grub-install:
+
+  sudo sbctl sign -s /efi/EFI/GRUB/grubx64.efi
+
+Then verify:
+
+  sudo sbctl verify
+
+Expected important results:
+
+  ✓ /boot/vmlinuz-linux is signed
+  ✓ /efi/EFI/GRUB/grubx64.efi is signed
+
+Inspect GRUB's PE signature:
+
+  sudo sbverify --list /efi/EFI/GRUB/grubx64.efi
+
+Inspect the kernel signature:
+
+  sudo sbverify --list /boot/vmlinuz-linux
+
+Both should show the expected custom certificate, e.g.:
+
+  /CN=Database Key
+
+
+CONFIGURATION CHECKS
+--------------------
+Check the main GRUB config:
+
+  sudo grub-script-check /boot/grub/grub.cfg
+
+Check grub-btrfs:
+
+  sudo grub-script-check /boot/grub/grub-btrfs.cfg
+
+Useful checks:
+
+  sudo grep -n "Windows Boot Manager" /boot/grub/grub.cfg
+
+  sudo grep -nE 'insmod (efi_gop|efi_uga|gfxmenu|gfxterm|png)' \
+    /boot/grub/grub.cfg
+
+Check boot entries:
+
+  sudo efibootmgr -v
+
+
+SAFE BACKUP BEFORE GRUB-INSTALL
+-------------------------------
+Before replacing GRUB EFI:
+
+  efi=/efi/EFI/GRUB/grubx64.efi
+  backup="${efi}.before-$(date -u +%Y%m%dT%H%M%SZ).bak"
+
+  sudo cp --no-clobber "$efi" "$backup"
+  sudo cmp "$efi" "$backup" && echo "Backup verified OK"
+
+Optional hashes:
+
+  sudo sha256sum /efi/EFI/GRUB/grubx64.efi
+  sudo sha256sum /boot/grub/grub.cfg
+
+Do NOT keep blindly accumulating backups on the ESP; remove obsolete backups
+only after confirming the new setup boots correctly.
+
+
+SECURE BOOT KEYS
+----------------
+Keys are managed by sbctl.
+
+The successful setup uses custom sbctl keys plus Microsoft vendor keys.
+
+Previously used enrollment command:
+
+  sudo sbctl enroll-keys -m
+
+IMPORTANT:
+Do NOT reset Secure Boot keys merely because GRUB fails to boot.
+Do NOT use "Reset to Setup Mode" or "Restore Factory Keys" as a routine
+troubleshooting step.
+
+Check current state:
+
+  sudo sbctl status
+
+  mokutil --sb-state
+
+Working state:
+
+  Setup Mode: disabled
+  Secure Boot: enabled
+  Vendor Keys: microsoft
+
+
+IMPORTANT DBX NOTE
+------------------
+During initial setup, resetting/enrolling keys resulted in dbx becoming empty.
+The original firmware Secure Boot variables were backed up before that change.
+
+This is separate from the GRUB boot fix.
+
+Do not modify PK, KEK, db or dbx casually. Restoring/merging dbx should be
+handled as a separate, carefully researched maintenance task.
+
+
+WINDOWS
+-------
+Windows Boot Manager is on a separate Windows ESP.
+
+GRUB detects it through os-prober.
+
+Relevant setting:
+
+  GRUB_DISABLE_OS_PROBER=false
+
+The custom key enrollment retained Microsoft vendor keys, which is important
+for Windows Secure Boot.
+
+The final GRUB image embeds fat and chain for Windows chainloading.
+
+Do not change the Windows firmware boot entry when repairing Arch GRUB unless
+there is a separate reason to do so.
+
+
+BTRFS / TIMESHIFT / GRUB-BTRFS
+-------------------------------
+Root filesystem:
+  Btrfs
+
+Root subvolume:
+  @
+
+Timeshift/grub-btrfs generates snapshot menu entries.
+
+Do not remove grub-btrfs or Timeshift merely to fix Secure Boot.
+
+CAUTION:
+Old snapshots can contain older kernel files. Signing the current:
+
+  /boot/vmlinuz-linux
+
+does NOT retroactively sign kernel copies stored inside older snapshots.
+Snapshot booting under Secure Boot therefore needs separate consideration.
+
+
+AFTER KERNEL UPDATES
+--------------------
+Secure Boot requires the kernel being booted to remain appropriately signed.
+
+After a kernel update, verify:
+
+  sudo sbctl verify
+
+If /boot/vmlinuz-linux is reported unsigned, sign it according to the sbctl
+setup before rebooting with Secure Boot enabled:
+
+  sudo sbctl sign -s /boot/vmlinuz-linux
+
+If automatic signing hooks are configured later, still use:
+
+  sudo sbctl verify
+
+to confirm the result.
+
+
+AFTER GRUB UPDATES / REINSTALLATION
+-----------------------------------
+If grub-install is run again:
+
+1. Use the working module configuration documented above.
+2. grub-install replaces grubx64.efi.
+3. Re-sign it:
+
+     sudo sbctl sign -s /efi/EFI/GRUB/grubx64.efi
+
+4. Verify:
+
+     sudo sbctl verify
+
+5. Check configurations:
+
+     sudo grub-script-check /boot/grub/grub.cfg
+     sudo grub-script-check /boot/grub/grub-btrfs.cfg
+
+6. Only then reboot with Secure Boot enabled.
+
+
+QUICK RECOVERY CHECKLIST
+------------------------
+If Arch suddenly stops booting after a GRUB/kernel update:
+
+1. Do NOT reset Secure Boot keys.
+
+2. If necessary, temporarily disable Secure Boot in firmware to recover Arch.
+
+3. Check:
+
+     sudo sbctl status
+     sudo sbctl verify
+
+4. Check signatures:
+
+     sudo sbverify --list /efi/EFI/GRUB/grubx64.efi
+     sudo sbverify --list /boot/vmlinuz-linux
+
+5. Validate config:
+
+     sudo grub-script-check /boot/grub/grub.cfg
+     sudo grub-script-check /boot/grub/grub-btrfs.cfg
+
+6. Confirm active GRUB configuration and entries:
+
+     sudo grep -n "Windows Boot Manager" /boot/grub/grub.cfg
+     sudo efibootmgr -v
+
+7. If GRUB itself was reinstalled, rebuild using the documented working
+   grub-install command and sign grubx64.efi again.
+
+8. Re-enable Secure Boot and test.
+
+
+KNOWN ERROR -> LIKELY CAUSE
+---------------------------
+Error:
+  prohibited by secure Boot policy
+
+Check:
+  - Is grubx64.efi signed?
+  - Was GRUB rebuilt/replaced after signing?
+  - Are the correct db keys enrolled?
+
+
+Error:
+  verification requested but nobody cares: ... normal.mod
+  verification requested but nobody cares: ... all_video.mod
+
+Check:
+  - Required modules are being loaded externally under lockdown.
+  - Rebuild GRUB with the required modules embedded.
+
+
+Error:
+  verification requested but nobody cares: /@/boot/vmlinuz-linux
+
+For this machine the successful fix was:
+  - shimless CA-key setup
+  - --disable-shim-lock
+  - tpm embedded in the GRUB EFI image
+  - signed GRUB EFI
+  - signed Linux kernel
+
+
+Error:
+  you need to load the kernel first
+
+This can be a secondary error. Look at the error immediately BEFORE it.
+In this case GRUB had rejected vmlinuz-linux, so initrd could not proceed.
+
+
+DO NOT FORGET
+-------------
+The most important maintenance rule:
+
+  grub-install -> NEW grubx64.efi -> SIGN IT AGAIN
+
+Working signing command:
+
+  sudo sbctl sign -s /efi/EFI/GRUB/grubx64.efi
+
+Working verification:
+
+  sudo sbctl verify
+
+And the command that solved the GRUB-side Secure Boot problem on this machine:
+
+  sudo grub-install \
+    --target=x86_64-efi \
+    --efi-directory=/efi \
+    --boot-directory=/boot \
+    --bootloader-id=GRUB \
+    --no-nvram \
+    --disable-shim-lock \
+    --modules="tpm btrfs fat chain part_msdos linux search configfile loadenv bli gfxmenu png echo test all_video efifwsetup"
+
+Last verified working:
+  2026-09-22

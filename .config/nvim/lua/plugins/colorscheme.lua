@@ -2,7 +2,7 @@ return {
 	{
 		"LazyVim/LazyVim",
 		opts = {
-			colorscheme = "darcubox",
+			colorscheme = require("util.colorscheme").load("darcubox"),
 		},
 	},
 }

@@ -6,5 +6,5 @@
 # /_/   \_\_|_|_| |_|\___/ \__,_|\__|
 #
 
-hyprctl dispatch workspaceopt allfloat
+hyprctl dispatch "hl.dsp.workspace.opt('allfloat')"
 notify-send "Windows on this workspace toggled to floating/tiling"

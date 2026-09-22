@@ -138,8 +138,11 @@ hl.window_rule({
 -- Common file dialogs / modals
 hl.window_rule({ match = { title = "^(Open)$" }, float = true })
 hl.window_rule({ match = { title = "^(Open Files)$" }, float = true })
+hl.window_rule({ match = { title = "^(Open File)$" }, float = true })
 hl.window_rule({ match = { title = "^(Choose Files)$" }, float = true })
 hl.window_rule({ match = { title = "^(Save As)$" }, float = true })
+hl.window_rule({ match = { title = "^(Save File)$" }, float = true })
+hl.window_rule({ match = { title = "^(Confirm)$" }, float = true })
 hl.window_rule({ match = { title = "^(Confirm to replace files)$" }, float = true })
 hl.window_rule({ match = { title = "^(File Operation Progress)$" }, float = true })
 hl.window_rule({ match = { class = "^(xdg-desktop-portal-gtk)$" }, float = true })
@@ -179,12 +182,21 @@ hl.window_rule({
 	size = { 950, 720 },
 })
 
--- Thunar
+-- Thunar (main window only — popup menus have no title and must not inherit opacity/size)
 hl.window_rule({
-	match = { class = "^([Tt]hunar)" },
+	match = { class = "^([Tt]hunar)", title = ".+" },
 	opacity = "0.70 0.70",
 	float = true,
 	size = { 950, 720 },
+})
+hl.window_rule({
+	name = "Thunar stayfocused",
+	match = {
+		class = "thunar|Thunar",
+		title = 'Attention|Rename "*.*"|Create Document from .*|New .* ...|Create New Folder',
+	},
+
+	stay_focused = true,
 })
 hl.window_rule({ match = { class = "([Tt]hunar)", title = "(File Operation Progress)" }, center = true })
 hl.window_rule({ match = { class = "([Tt]hunar)", title = "(Confirm to replace files)" }, center = true })
@@ -198,9 +210,18 @@ hl.window_rule({ match = { class = "^(org.kde.dolphin)$", title = "^(Progress Di
 hl.window_rule({ match = { class = "^(org.kde.dolphin)$", title = "^(Copying — Dolphin)$" }, float = true })
 
 -- Ghostty monitors
-hl.window_rule({ match = { class = "^(com.mitchellh.ghostty)$", title = "^(top)$" }, float = true })
-hl.window_rule({ match = { class = "^(com.mitchellh.ghostty)$", title = "^(btop)$" }, float = true })
-hl.window_rule({ match = { class = "^(com.mitchellh.ghostty)$", title = "^(htop)$" }, float = true })
+hl.window_rule({
+	match = { class = "^(com.mitchellh.ghostty)$", title = "^(top)$" },
+	float = true,
+})
+hl.window_rule({
+	match = { class = "^(com.mitchellh.ghostty)$", title = "^(btop)$" },
+	float = true,
+})
+hl.window_rule({
+	match = { class = "^(com.mitchellh.ghostty)$", title = "^(htop)$" },
+	float = true,
+})
 
 -- Firefox / Zen library
 hl.window_rule({ match = { class = "^(firefox)$", title = "^(Library)$" }, float = true })
@@ -246,7 +267,7 @@ hl.window_rule({ match = { class = "^(org.fagram.desktop)$" }, opacity = "0.90 0
 hl.window_rule({ match = { class = "(com.usebottles.bottles)" }, float = true, size = { 800, 600 } })
 
 -- Zen — no border
-hl.window_rule({ match = { class = "(zen)" }, border_size = 0 })
+hl.window_rule({ match = { class = "(zen)" } })
 
 -- Satty (screenshot annotation)
 hl.window_rule({ match = { class = "^(com.github.satty)$" }, float = true })
@@ -295,6 +316,13 @@ hl.window_rule({ match = { class = "^(steam)$", title = "^(notificationtoasts)" 
 -- xdg-desktop-portal
 hl.window_rule({ match = { class = "^(xdg-desktop-portal)$" }, float = true })
 
+-- ══════════════════════════════════════════════
+
+-- Fullscreen windows — disable glass
+hl.window_rule({ match = { fullscreen = true } })
+
+-- Steam — contrasted preset (punchy glass)
+hl.window_rule({ match = { class = "^([Ss]team)$" } })
 
 -- ══════════════════════════════════════════════
 -- LAYER RULES
@@ -324,14 +352,17 @@ hl.layer_rule({ match = { namespace = "waybar" }, blur = true, blur_popups = tru
 hl.layer_rule({ match = { namespace = "swaync-control-center" }, blur = true, ignore_alpha = 0.5 })
 hl.layer_rule({ match = { namespace = "swaync-notification-window" }, blur = true, ignore_alpha = 0.5 })
 
+hl.window_rule({ match = { class = "^com.danklinux.dms$" }, float = true, opacity = 0.8 })
+
 -- DMS modals
 hl.layer_rule({
 	match = {
 		namespace = "dms:(polkit|notification-center-modal|workspace-overview|clipboard|spotlight|settings|process-list-modal|dock)",
 	},
 	blur = true,
-	ignore_alpha = 0,
+	ignore_alpha = 0.5,
 })
+
 hl.layer_rule({
 	match = { namespace = "dms:(notification-popup|osd)" },
 	blur = true,
@@ -341,10 +372,10 @@ hl.layer_rule({
 -- DMS shell components
 hl.layer_rule({
 	match = {
-		namespace = "dms:(color-picker|control-center|app-launcher|vpn|battery|dash|notification-center-popout|bar|tooltip|toast|dock-context-menu|system-update|popout|process-list-popout)",
+		namespace = "dms:(color-picker|control-center|app-launcher|vpn|battery|dash|notification-center-popout|bar|tooltip|toast|dock-context-menu|system-update|popout|process-list-popout|tray-menu-window)",
 	},
 	blur = true,
-	ignore_alpha = 0,
+	ignore_alpha = 0.5,
 })
 
 -- DMS animations

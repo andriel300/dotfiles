@@ -5,7 +5,7 @@
 local mainMod = "SUPER"
 local scripts = os.getenv("HOME") .. "/.config/hypr/scripts"
 
-local terminal = "ghostty"
+local terminal = "GTK_IM_MODULE=simple ghostty"
 local fileManager = "thunar"
 local browser = "zen-browser"
 local notes = "obsidian"
@@ -46,7 +46,7 @@ hl.bind(mainMod .. " + SHIFT + A", hl.dsp.exec_cmd(scripts .. "/toggle-animation
 hl.bind(mainMod .. " + slash", hl.dsp.exec_cmd(scripts .. "/keybindings.sh"))
 hl.bind(mainMod .. " + CTRL + R", hl.dsp.exec_cmd(scripts .. "/loadconfig.sh"))
 hl.bind(mainMod .. " + ALT + C", hl.dsp.exec_cmd(scripts .. "/border-animated-themes.sh"))
-hl.bind(mainMod .. " + CTRL + Q", hl.dsp.exec_cmd("waypaper"))
+hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("dms ipc wallpaperCarousel toggle"))
 hl.bind(mainMod .. " + CTRL + W", hl.dsp.exec_cmd(scripts .. "/workmode-toggle.sh"))
 hl.bind(mainMod .. " + ccedilla", hl.dsp.exec_cmd(scripts .. "/toggle-lang.sh"))
 
@@ -103,7 +103,7 @@ end)
 
 -- Overview: fit all columns into view (inhibit_scroll not available in 0.55.2)
 local _colOverview = false
-hl.bind(mainMod .. " + W", function()
+hl.bind(mainMod .. " + SHIFT + W", function()
 	if _colOverview then
 		hl.dispatch(hl.dsp.layout("colresize 0.9"))
 		_colOverview = false

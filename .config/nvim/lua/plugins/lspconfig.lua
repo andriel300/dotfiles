@@ -131,6 +131,7 @@ return {
 						},
 					},
 				},
+				eslint = {},
 			},
 			-- you can do any additional lsp server setup here
 			-- return true if you don't want this server to be setup with lspconfig
@@ -143,6 +144,19 @@ return {
 				-- end,
 				-- Specify * to use this function as a fallback for any server
 				-- ["*"] = function(server, opts) end,
+				eslint = function()
+					vim.api.nvim_create_autocmd("LspAttach", {
+						group = vim.api.nvim_create_augroup("eslint_formatting", { clear = true }),
+						callback = function(args)
+							local client = vim.lsp.get_client_by_id(args.data.client_id)
+							if client and client.name == "eslint" then
+								client.server_capabilities.documentFormattingProvider = true
+							elseif client and client.name == "tsgo" then
+								client.server_capabilities.documentFormattingProvider = false
+							end
+						end,
+					})
+				end,
 			},
 		}
 		return ret

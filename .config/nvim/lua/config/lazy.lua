@@ -20,7 +20,6 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	end
 end
 vim.opt.rtp:prepend(lazypath)
-
 require("lazy").setup({
 	spec = {
 		-- add LazyVim and import its plugins
@@ -28,7 +27,6 @@ require("lazy").setup({
 		-- import/override with your plugins
 		{ import = "plugins" },
 	},
-	{ import = "lazyvim.plugins.extras.linting.eslint" },
 	{ import = "lazyvim.plugins.extras.formatting.prettier" },
 	defaults = {
 		-- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
@@ -40,7 +38,21 @@ require("lazy").setup({
 		-- version = "*", -- try installing the latest stable version for plugins that support semver
 	},
 	install = {
-		colorscheme = { "tokyonight", "monokai", "habamax", "cyberdream" },
+		colorscheme = {
+			"darcubox",
+			"tokyonight",
+			"catppuccin",
+			"kanagawa",
+			"rose-pine",
+			"nightfox",
+			"onedark",
+			"monokai",
+			"habamax",
+			"cyberdream",
+			"gruvbox",
+			"dracula",
+			"darcula",
+		},
 	},
 	checker = {
 		enabled = true, -- check for plugin updates periodically
